@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3752E9</color>
+    <color name="colorPrimaryDark">#0B539E</color>
+    <color name="colorAccent">#3752E9</color>
+    <color name="appBackgroundColor">#A09D9D</color>
+    <color name="white">#ffffff</color>
+    <color name="layoutBackgroundColor">#F5F2F2</color>
+    <color name="border_color">#000000</color>
+    <color name="black">#000000</color>
+    <color name="red">#E91515</color>
+    <color name="loader_color">#3752E9</color>
+    <color name="transparent">#00000000</color>
+    <color name="editTextColor">#000000</color>
+    <color name="hint_color">#444343</color>
+    <color name="light_grey">#CAC7C7</color>
+    <color name="buttonbg">#3752E9</color>
+    <color name="bkgColor">#0E6BCE</color>
+    <color name="buttonTextColor">#ffffff</color>
+    <color name="fb_text_color">#fff</color>
+    <color name="alreadyMemberTextColor">#000000</color>
+    <color name="alreadyHaveALoginButtonTextColor">#3752E9</color>
+    <color name="fb_button_background">#3b5998</color>
+    <color name="login_new_user_text_color">#757575</color>
+    <color name="forgotPasswordTextViewColor">#3752E9</color>
+    <color name="nav_drawer_text_Color">#000000</color>
+    <color name="nav_drawer_lineColor">#D6D3D3</color>
+    <color name="leftMenuBackground">#EBE1E1</color>
+    <color name="sign_up_text_color">#3752E9</color>
+    <color name="movieTitleColor">#3752E9</color>
+    <color name="contentTitleColor">#ffffff</color>
+    <color name="windowBackground">#00000000</color>
+    <color name="latest_bkg">#CA0D0D</color>
+
+</resources>

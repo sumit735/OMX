@@ -1,0 +1,122 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@color/appBackgroundColor" />
+
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/pager2"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/pager"
+                android:layout_marginTop="15dp"
+                android:background="@color/appBackgroundColor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Gnere"
+                android:textSize="18dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/genreListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pager2"
+                android:layout_centerHorizontal="true"
+                android:scrollbars="none"
+                android:layout_margin="5dp"
+             />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/my_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/genreListView"
+                android:scrollbars="none"
+                android:layout_margin="5dp"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_recycler_view"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:scrollbars="none"
+                    android:layout_height="300dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <Button
+                    android:id="@+id/latest_movies"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/reg_screen_landscape"
+                    android:textColor="@color/white"
+                    android:text="MOVIES" />
+
+                <Button
+                    android:id="@+id/latest_webseries"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/reg_screen_landscape"
+                    android:textColor="@color/white"
+                    android:text="Webseries" />
+
+                <Button
+                    android:id="@+id/latest_shortfilms"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/reg_screen_landscape"
+                    android:textColor="@color/white"
+                    android:text="Short Films" />
+
+                <Button
+                    android:id="@+id/latest_songs"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/reg_screen_landscape"
+                    android:textColor="@color/white"
+                    android:text="Songs" />
+                </LinearLayout>
+                </HorizontalScrollView>
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

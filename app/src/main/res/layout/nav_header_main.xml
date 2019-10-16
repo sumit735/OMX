@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white"
+    android:gravity="bottom"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="600dp"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    <ImageView
+        android:id= "@+id/imageView"
+        android:layout_width= "wrap_content"
+        android:layout_height= "wrap_content"
+        android:contentDescription= "Data"
+        android:paddingTop= "15dp"
+        app:srcCompat= "@mipmap/ic_launcher_round" />
+    <TextView
+        android:layout_width= "match_parent"
+        android:layout_height= "wrap_content"
+        android:paddingTop= "10dp"
+        android:text= "Flimy+"
+        android:textAppearance= "@style/TextAppearance.AppCompat.Body1" />
+    <TextView
+        android:id= "@+id/textView"
+        android:layout_width= "wrap_content"
+        android:layout_height= "wrap_content"
+        android:text= "Detail" />
+</LinearLayout>

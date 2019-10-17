@@ -35,7 +35,29 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Gnere"
+                android:text="Recently Watched"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="18dp"/>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/my_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/genreListView"
+                android:scrollbars="none"
+                android:layout_margin="5dp"
+                android:visibility="visible" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Genres"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:padding="5dp"
                 android:textColor="@color/black"
                 android:textSize="18dp"/>
 
@@ -50,14 +72,16 @@
 
              />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/my_recycler_view"
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/genreListView"
-                android:scrollbars="none"
+                android:text="Latest Releases"
+                android:textStyle="bold"
                 android:layout_margin="5dp"
-                android:visibility="visible" />
+                android:padding="5dp"
+                android:textColor="@color/black"
+                android:textSize="18dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,17 +93,18 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:scrollbars="none"
-                    android:layout_height="300dp">
+                    android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp">
 
                 <Button
                     android:id="@+id/latest_movies"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/reg_screen_landscape"
+                    android:background="@drawable/latestvideos_bkg"
                     android:textColor="@color/white"
                     android:text="MOVIES" />
 
@@ -88,7 +113,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/reg_screen_landscape"
+                    android:background="@drawable/latestvideos_bkg"
                     android:textColor="@color/white"
                     android:text="Webseries" />
 
@@ -97,7 +122,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/reg_screen_landscape"
+                    android:background="@drawable/latestvideos_bkg"
                     android:textColor="@color/white"
                     android:text="Short Films" />
 
@@ -106,7 +131,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/reg_screen_landscape"
+                    android:background="@drawable/latestvideos_bkg"
                     android:textColor="@color/white"
                     android:text="Songs" />
                 </LinearLayout>

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,9 +28,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE;
 import static android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK;
@@ -52,6 +63,12 @@ public class GenreListActivity extends AppCompatActivity {
     int scrolledPosition=0;
     boolean scrolling;
     boolean firstTime = false;
+    GetUserDetails asyncReg;
+    int corePoolSize = 60;
+    int maximumPoolSize = 80;
+    int keepAliveTime = 10;
+    BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+    Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +90,8 @@ public class GenreListActivity extends AppCompatActivity {
         });
 
 
-       callData();
+        asyncReg = new GetUserDetails();
+        asyncReg.executeOnExecutor(threadPoolExecutor);
 
 
         ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
@@ -136,7 +154,8 @@ public class GenreListActivity extends AppCompatActivity {
                         }
                         offset += 1;
 
-                       callData();
+                        asyncReg = new GetUserDetails();
+                        asyncReg.executeOnExecutor(threadPoolExecutor);
 
                         scrolling = false;
 
@@ -213,84 +232,102 @@ public class GenreListActivity extends AppCompatActivity {
     }
 
 
-    private void callData() {
+    public class GetUserDetails extends AsyncTask<Void, String, JSONArray> {
+        JSONArray array;
+        ProgressBarHandler pDialog;
+        @Override
+        protected JSONArray doInBackground(Void... params) {
+
+            try {
+
+                URL url = new URL("http://3.81.18.178/rest/api/login.php");
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod("GET");
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                httpURLConnection.setRequestProperty("Accept", "application/json");
+                httpURLConnection.setDoOutput(true);
+                httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+                JSONObject postData = new JSONObject();
+                try {
+                    postData.put("genre", getIntent().getStringArrayExtra("genreName"));
+
+                    Log.v("SUBHA", "json Data == " + postData.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
 
-        String tag_json_req = "user_login";
-        StringRequest data = new StringRequest(Request.Method.POST,
-                "http://3.81.18.178/oflix/api/selected_movies_by_genres.php?appid=735426",
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //  progressDialog.dismiss();
 
-                        try {
-                            Log.d(" response is ", response);
+                DataOutputStream outputStream = new DataOutputStream(httpURLConnection.getOutputStream());
+                outputStream.write(postData.toString().getBytes("UTF-8"));
 
-                            JSONArray jsonObject = new JSONArray(response);
+                int code = httpURLConnection.getResponseCode();
 
-                            //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
 
+                String line = "";
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                bufferedReader.close();
 
-                            Log.v("SUBHA", "api res == " + jsonObject);
-
-
-                            int lengthJsonArr = jsonObject.length();
-                            JSONObject jsonChildNode;
-                            Log.v("SUBHA", "api res == " + lengthJsonArr);
-                            for (int i = 0; i < lengthJsonArr; i++) {
-                                GridItem movie = new GridItem();
-                                jsonChildNode = jsonObject.getJSONObject(i);
+                String response = stringBuilder.toString();
+                JSONArray jsonObject = new JSONArray(response);
 
 
-                                movie.setId(jsonChildNode.getString("id"));
-                                movie.setTitle(jsonChildNode.getString("name"));
-                                movie.setImageId(jsonChildNode.getString("image"));
-                                movie.setShort_desc(jsonChildNode.getString("details"));
-                                movie.setVideoUrl(jsonChildNode.getString("url"));
-                                movie.setBannerImage(jsonChildNode.getString("banner_image"));
-                                movie.setMovieDuration(jsonChildNode.getString("total_time"));
-                                movie.setMovieGenre(jsonChildNode.getString("genre"));
+
+                int lengthJsonArr = jsonObject.length();
+                JSONObject jsonChildNode;
+                Log.v("SUBHA","api res == " + lengthJsonArr);
+                for (int i = 0; i < lengthJsonArr; i++) {
+                    GridItem movie = new GridItem();
+                    jsonChildNode = jsonObject.getJSONObject(i);
+
+                    movie.setId(jsonChildNode.getString("id"));
+                    movie.setTitle(jsonChildNode.getString("name"));
+                    movie.setImageId(jsonChildNode.getString("image"));
+                    movie.setShort_desc(jsonChildNode.getString("details"));
+                    movie.setVideoUrl(jsonChildNode.getString("url"));
+                    movie.setBannerImage(jsonChildNode.getString("banner_image"));
+                    movie.setMovieDuration(jsonChildNode.getString("total_time"));
+                    movie.setMovieGenre(jsonChildNode.getString("genre"));
 
 
-                                itemData.add(movie);
+                    itemData.add(movie);
 
 
-                            }
+                }
 
-                            customGridAdapter.notifyDataSetChanged();
+                customGridAdapter.notifyDataSetChanged();
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() == null) {
 
-                } else
-                    Toast.makeText(GenreListActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+
+                e.printStackTrace();
             }
-        }) {
+            return array;
 
 
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+        }
 
-                Map<String, String> params = new HashMap<>();
-               /* params.put("method","citizenLogin");
-                params.put("strUserName",regEmailStr);
-                params.put("strPassword",regPasswordStr);
-*/
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-                Log.d("params are :", "" + params);
-                return params;
-            }
-        };
-        data.setShouldCache(false);
-        data.setRetryPolicy(new
-                DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
+
+        }
+
+        @Override
+        protected void onPostExecute(JSONArray array) {
+            super.onPostExecute(array);
+
+
+        }
     }
+
 }

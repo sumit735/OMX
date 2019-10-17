@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
         DataModel[] drawerItem = new DataModel[6];
 
-        drawerItem[0] = new DataModel(R.drawable.films,"Home");
+        drawerItem[0] = new DataModel(R.drawable.home,"Home");
         drawerItem[1] = new DataModel(R.drawable.films,"Movies");
         drawerItem[2] = new DataModel( R.drawable.web_series,"Web Series");
         drawerItem[3] = new DataModel( R.drawable.short_films,"Short Movies");
-        drawerItem[4] = new DataModel( R.drawable.short_films,"Songs");
+        drawerItem[4] = new DataModel( R.drawable.songs,"Songs");
         drawerItem[5] = new DataModel( R.drawable.logout,"Logout");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);

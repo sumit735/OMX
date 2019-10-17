@@ -318,6 +318,7 @@ public class HomeFragment extends Fragment {
 
                                 movie.setId(jsonChildNode.getString("id"));
                                 movie.setTitle(jsonChildNode.getString("genre"));
+                                movie.setImage(jsonChildNode.getString("genre_image"));
 
                                 genreItems.add(movie);
 

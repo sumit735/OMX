@@ -207,9 +207,15 @@ public class LoginActivity extends AppCompatActivity {
                 Log.v("SUBHA","Login ID == " + jsonResponse);
                 // }
 
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+
+
+
+
+                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                pDialog.hide();
+
 
 
 
@@ -225,7 +231,8 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            pDialog = new ProgressBarHandler(LoginActivity.this);
+            pDialog.show();
 
         }
 

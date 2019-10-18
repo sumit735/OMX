@@ -17,20 +17,28 @@
             android:orientation="vertical"
             android:background="@color/white">
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pager"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/adspager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/appBackgroundColor" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:scrollbars="none"
+                android:layout_margin="5dp"
+
+                />
 
 
-            <androidx.viewpager.widget.ViewPager
-                android:id="@+id/pager2"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/bannerpager"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_below="@+id/pager"
-                android:layout_marginTop="15dp"
-                android:background="@color/appBackgroundColor" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/pager2"
+                android:layout_centerHorizontal="true"
+                android:scrollbars="none"
+                android:layout_margin="5dp"
+
+                />
 
             <TextView
                 android:layout_width="match_parent"

@@ -71,7 +71,7 @@ public class MoviesFragment extends Fragment {
     int scrolledPosition=0;
     boolean scrolling;
     boolean firstTime = false;
-
+    ProgressBarHandler videoPDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -210,48 +210,6 @@ public class MoviesFragment extends Fragment {
         void onLongClick(View view, int position);
     }
 
-    public static class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
-
-        private GestureDetector gestureDetector;
-        private ClickListener clickListener;
-
-        public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-            this.clickListener = clickListener;
-            gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clickListener != null) {
-                        clickListener.onLongClick(child, recyclerView.getChildPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clickListener != null && gestureDetector.onTouchEvent(e)) {
-                clickListener.onClick(child, rv.getChildPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
 
 
     public void resetData() {
@@ -275,14 +233,15 @@ public class MoviesFragment extends Fragment {
 
     private void callData() {
 
-
+        videoPDialog = new ProgressBarHandler(getActivity());
+        videoPDialog.show();
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/get_movie_list.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                      //  progressDialog.dismiss();
+                     videoPDialog.hide();
 
                         try {
                             Log.d(" response is ", response);

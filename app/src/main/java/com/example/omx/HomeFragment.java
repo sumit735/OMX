@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -18,22 +17,22 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.example.omx.adapter.DrawerItemCustomAdapter;
 import com.example.omx.adapter.GenreAdapter;
-import com.example.omx.adapter.HomeListAdapter;
 
 import com.example.omx.adapter.MovieAdapter;
+import com.example.omx.adapter.AdsAdapter;
+import com.example.omx.adapter.NewReleasesAdapter;
+import com.example.omx.model.AdsItem;
+import com.example.omx.model.BannerItem;
 import com.example.omx.model.GenreItem;
 import com.example.omx.model.GetMenuItem;
 import com.example.omx.model.GridItem;
-import com.example.omx.model.ListModel;
 import com.example.omx.model.SharedPreferenceClass;
 
 import org.json.JSONArray;
@@ -61,6 +60,8 @@ public class HomeFragment extends Fragment {
 
     Context context;
     ArrayList<GenreItem> genreItems = new ArrayList<GenreItem>();
+    ArrayList<AdsItem> adsItems = new ArrayList<AdsItem>();
+    ArrayList<BannerItem> bannerItems = new ArrayList<BannerItem>();
     int currentPage = 0;
     String section_name;
     String section_id;
@@ -70,8 +71,8 @@ public class HomeFragment extends Fragment {
     final long PERIOD_MS = 3000; // time in milliseconds between successive task executions.
     ArrayList<GetMenuItem> menuItems;
     RecyclerView my_recycler_view;
-    ViewPager mViewPager;
-    ViewPager bannerViewPager;
+    RecyclerView adspager;
+    RecyclerView bannerpager;
     LinearLayoutManager mLayoutManager;
     Button latest_songs, latest_shortfilms, latest_webseries, latest_movies;
     MovieAdapter mAdapter;
@@ -93,8 +94,8 @@ public class HomeFragment extends Fragment {
 
         menuItems = new ArrayList<GetMenuItem>();
         my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
-        mViewPager = (ViewPager) v.findViewById(R.id.pager);
-        bannerViewPager = (ViewPager) v.findViewById(R.id.pager2);
+        adspager = (RecyclerView) v.findViewById(R.id.adspager);
+        bannerpager = (RecyclerView) v.findViewById(R.id.bannerpager);
         loadingPanel = (RelativeLayout) v.findViewById(R.id.loadingPanel);
         genreListView = (RecyclerView) v.findViewById(R.id.genreListView);
         latest_movies = (Button) v.findViewById(R.id.latest_movies);
@@ -140,16 +141,13 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        latestreleasesBannerList();
 
 
-        callData();
 
-        TransformerAdapter adapterView = new TransformerAdapter(getActivity());
-        mViewPager.setAdapter(adapterView);
-        mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
 
-        asyncReg = new WatchHistoryList();
-        asyncReg.executeOnExecutor(threadPoolExecutor);
+
+
 
 
         return v;
@@ -164,6 +162,14 @@ public class HomeFragment extends Fragment {
         super.onStop();
     }
 
+    @Override
+    public void onResume() {
+
+        super.onResume();
+
+        asyncReg = new WatchHistoryList();
+        asyncReg.executeOnExecutor(threadPoolExecutor);
+    }
 
     public class WatchHistoryList extends AsyncTask<Void, String, JSONArray> {
         JSONArray array;
@@ -332,6 +338,9 @@ public class HomeFragment extends Fragment {
                             genreListView.setItemAnimator(new DefaultItemAnimator());
                             genreListView.setAdapter(genreAdapter);
 
+                            asyncReg = new WatchHistoryList();
+                            asyncReg.executeOnExecutor(threadPoolExecutor);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -355,6 +364,166 @@ public class HomeFragment extends Fragment {
                 params.put("strUserName",regEmailStr);
                 params.put("strPassword",regPasswordStr);
 */
+
+                Log.d("params are :", "" + params);
+                return params;
+            }
+        };
+        data.setShouldCache(false);
+        data.setRetryPolicy(new
+                DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
+    }
+
+    private void adsBannerList() {
+
+
+        String tag_json_req = "user_login";
+        StringRequest data = new StringRequest(Request.Method.POST,
+                "http://3.81.18.178/oflix/api/genre_list_api.php?appid=735426",
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //  progressDialog.dismiss();
+
+                        try {
+                            Log.d(" response is ", response);
+
+                            JSONArray jsonObject = new JSONArray(response);
+
+                            //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
+
+
+                            Log.v("SUBHA","api res == " + jsonObject);
+
+
+
+                            int lengthJsonArr = jsonObject.length();
+                            JSONObject jsonChildNode;
+                            Log.v("SUBHA","api res == " + lengthJsonArr);
+                            for (int i = 0; i < lengthJsonArr; i++) {
+                                AdsItem movie = new AdsItem();
+                                jsonChildNode = jsonObject.getJSONObject(i);
+
+                                movie.setId(jsonChildNode.getString("id"));
+                                movie.setImage(jsonChildNode.getString("genre_image"));
+
+                                adsItems.add(movie);
+
+
+                            }
+
+                            AdsAdapter adsAdapter = new AdsAdapter(bannerItems,getActivity());
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+                            adspager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
+                            adspager.setItemAnimator(new DefaultItemAnimator());
+                            adspager.setAdapter(adsAdapter);
+                            callData();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() == null) {
+
+                } else
+                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+               /* params.put("method","citizenLogin");
+                params.put("strUserName",regEmailStr);
+                params.put("strPassword",regPasswordStr);
+*/
+
+                Log.d("params are :", "" + params);
+                return params;
+            }
+        };
+        data.setShouldCache(false);
+        data.setRetryPolicy(new
+                DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
+    }
+    private void latestreleasesBannerList() {
+
+
+        String tag_json_req = "user_login";
+        StringRequest data = new StringRequest(Request.Method.POST,
+                "http://3.81.18.178/oflix/api/banners.php?appid=735426",
+                new com.android.volley.Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //  progressDialog.dismiss();
+
+                        try {
+                            Log.d(" response is ", response);
+
+                            JSONArray jsonObject = new JSONArray(response);
+
+                            //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
+
+
+                            Log.v("SUBHA","api res == " + jsonObject);
+
+
+
+                            int lengthJsonArr = jsonObject.length();
+                            JSONObject jsonChildNode;
+                            Log.v("SUBHA","api res == " + lengthJsonArr);
+                            for (int i = 0; i < lengthJsonArr; i++) {
+                                BannerItem movie = new BannerItem();
+                                jsonChildNode = jsonObject.getJSONObject(i);
+
+                                movie.setId(jsonChildNode.getString("id"));
+                                movie.setImage(jsonChildNode.getString("imgurl"));
+
+                                bannerItems.add(movie);
+
+
+                            }
+
+                            NewReleasesAdapter adsAdapter = new NewReleasesAdapter(bannerItems,getActivity());
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
+                            bannerpager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
+                            bannerpager.setItemAnimator(new DefaultItemAnimator());
+                            bannerpager.setAdapter(adsAdapter);
+
+                            adsBannerList();
+
+
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.getMessage() == null) {
+
+                } else
+                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                Map<String, String> params = new HashMap<>();
+
 
                 Log.d("params are :", "" + params);
                 return params;

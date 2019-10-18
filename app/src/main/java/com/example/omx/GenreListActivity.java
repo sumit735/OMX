@@ -89,6 +89,7 @@ public class GenreListActivity extends AppCompatActivity {
             }
         });
 
+        Log.v("SUBHA","genre value == " + getIntent().getStringExtra("genreName"));
 
         asyncReg = new GetUserDetails();
         asyncReg.executeOnExecutor(threadPoolExecutor);
@@ -202,16 +203,6 @@ public class GenreListActivity extends AppCompatActivity {
     }
 
 
-    //load video urls as per resolution
-
-    public interface ClickListener {
-        void onClick(View view, int position);
-
-        void onLongClick(View view, int position);
-    }
-
-
-
 
     public void resetData() {
         if (itemData != null && itemData.size() > 0) {
@@ -240,7 +231,7 @@ public class GenreListActivity extends AppCompatActivity {
 
             try {
 
-                URL url = new URL("http://3.81.18.178/rest/api/login.php");
+                URL url = new URL("http://3.81.18.178/oflix/api/selected_movies_by_genres.php?appid=735426");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -252,7 +243,7 @@ public class GenreListActivity extends AppCompatActivity {
 
                 JSONObject postData = new JSONObject();
                 try {
-                    postData.put("genre", getIntent().getStringArrayExtra("genreName"));
+                    postData.put("genre", getIntent().getStringExtra("genreName"));
 
                     Log.v("SUBHA", "json Data == " + postData.toString());
 
@@ -304,6 +295,7 @@ public class GenreListActivity extends AppCompatActivity {
                 }
 
                 customGridAdapter.notifyDataSetChanged();
+                pDialog.hide();
 
 
             } catch (Exception e) {
@@ -318,7 +310,8 @@ public class GenreListActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            pDialog = new ProgressBarHandler(GenreListActivity.this);
+            pDialog.show();
 
         }
 

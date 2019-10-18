@@ -7,10 +7,13 @@
     <string name="story">The Nun is a 2018 American gothic supernatural horror film directed by Corin Hardy and written by Gary Dauberman, from a story by Dauberman and James Wan.[2][3] It is a spin-off of 2016s The Conjuring 2 and the fifth installment in the Conjuring Universe franchise. The film stars Demián Bichir, Taissa Farmiga and Jonas Bloquet, with Bonnie Aarons reprising her role as the Demon Nun, an incarnation of Valak, from The Conjuring 2. The plot follows a Roman Catholic priest and a nun in her novitiate as they uncover an unholy secret in 1952 Romania.</string>
 
     <string-array name="navigation_drawer_items_array">
+        <item>Home</item>
         <item>Movies</item>
         <item>Web Series</item>
-        <item>Songs</item>
         <item>Short Movies</item>
+        <item>Songs</item>
+        <item>Logout</item>
+
     </string-array>
 
     <string name="exo">fonts/Exo2-Light.ttf</string>

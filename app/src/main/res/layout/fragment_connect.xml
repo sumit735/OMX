@@ -55,7 +55,6 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="gone"
-            android:indeterminateDrawable="@drawable/progress_rawable"
             android:indeterminateDuration="1000" />
     </RelativeLayout>
 

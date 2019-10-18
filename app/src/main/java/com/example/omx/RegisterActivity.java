@@ -224,9 +224,14 @@ public class RegisterActivity extends AppCompatActivity {
                 Log.v("SUBHA","Login ID == " + jsonResponse);
                 // }
 
-                Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
+
+
+
+                    Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
+                    startActivity(intent);
+               finish();
+
+
 
 
             } catch (Exception e) {
@@ -241,7 +246,8 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
+            pDialog = new ProgressBarHandler(RegisterActivity.this);
+            pDialog.show();
 
         }
 

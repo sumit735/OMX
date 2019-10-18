@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
 
             mDrawerList.setItemChecked(position, true);
             mDrawerList.setSelection(position);
-            setTitle(mNavigationDrawerItemTitles[position]);
+            //setTitle(drawerItem[position]);
             mDrawerLayout.closeDrawer(mDrawerList);
 
         } else {

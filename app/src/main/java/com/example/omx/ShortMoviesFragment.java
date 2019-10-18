@@ -56,8 +56,12 @@ public class ShortMoviesFragment extends Fragment {
     int scrolledPosition=0;
     boolean scrolling;
     boolean firstTime = false;
+    ProgressBarHandler videoPDialog;
 
-    public ShortMoviesFragment() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -257,14 +261,15 @@ public class ShortMoviesFragment extends Fragment {
 
     private void callData() {
 
-
+        videoPDialog = new ProgressBarHandler(getActivity());
+        videoPDialog.show();
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/get_shortmovies.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //  progressDialog.dismiss();
+                        videoPDialog.hide();
 
                         try {
                             Log.d(" response is ", response);

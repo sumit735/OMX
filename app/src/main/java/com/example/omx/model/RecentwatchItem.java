@@ -1,7 +1,7 @@
 package com.example.omx.model;
 
 
-public class GridItem {
+public class RecentwatchItem {
     private String title;
     private String videoUrl;
     private String imageId;

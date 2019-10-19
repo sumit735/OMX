@@ -33,6 +33,7 @@ import com.example.omx.model.BannerItem;
 import com.example.omx.model.GenreItem;
 import com.example.omx.model.GetMenuItem;
 import com.example.omx.model.GridItem;
+import com.example.omx.model.RecentwatchItem;
 import com.example.omx.model.SharedPreferenceClass;
 
 import org.json.JSONArray;
@@ -57,7 +58,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment {
 
-
+ProgressBarHandler pDialog;
     Context context;
     ArrayList<GenreItem> genreItems = new ArrayList<GenreItem>();
     ArrayList<AdsItem> adsItems = new ArrayList<AdsItem>();
@@ -80,6 +81,7 @@ public class HomeFragment extends Fragment {
     RelativeLayout loadingPanel;
     SharedPreferenceClass sharedPreferenceClass;
     ArrayList<GridItem> itemData = new ArrayList<GridItem>();
+    ArrayList<RecentwatchItem> recentwatchItems = new ArrayList<RecentwatchItem>();
     int keepAliveTime = 10;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
@@ -146,7 +148,8 @@ public class HomeFragment extends Fragment {
 
 
 
-
+        asyncReg = new WatchHistoryList();
+        asyncReg.executeOnExecutor(threadPoolExecutor);
 
 
 
@@ -161,6 +164,8 @@ public class HomeFragment extends Fragment {
         // To prevent a memory leak on rotation, make sure to call stopAutoCycle() on the slider before activity or fragment is destroyed
         super.onStop();
     }
+
+
 
     @Override
     public void onResume() {
@@ -234,7 +239,7 @@ public class HomeFragment extends Fragment {
                         JSONObject jsonChildNode;
                         Log.v("SUBHA", "api res == " + lengthJsonArr);
                         for (int i = 0; i < lengthJsonArr; i++) {
-                            GridItem movie = new GridItem();
+                            RecentwatchItem movie = new RecentwatchItem();
                             jsonChildNode = jsonObject.getJSONObject(i);
 
 
@@ -247,17 +252,19 @@ public class HomeFragment extends Fragment {
                             movie.setMovieDuration(jsonChildNode.getString("total_time"));
                             movie.setMovieGenre(jsonChildNode.getString("genre"));
 
-                            itemData.add(movie);
+                            recentwatchItems.add(movie);
 
 
                         }
 
-                        mAdapter = new MovieAdapter(itemData, getContext());
+                        mAdapter = new MovieAdapter(recentwatchItems, getContext());
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
                         my_recycler_view.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
                         my_recycler_view.setItemAnimator(new DefaultItemAnimator());
                         my_recycler_view.setAdapter(mAdapter);
+
+
                     } else {
                         Toast.makeText(context, "No Recently Watched Videos", Toast.LENGTH_SHORT).show();
                     }
@@ -281,7 +288,6 @@ public class HomeFragment extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-
         }
 
         @Override
@@ -294,14 +300,15 @@ public class HomeFragment extends Fragment {
 
     private void callData() {
 
-
+        pDialog = new ProgressBarHandler(getActivity());
+        pDialog.show();
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/genre_list_api.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //  progressDialog.dismiss();
+                       pDialog.hide();
 
                         try {
                             Log.d(" response is ", response);
@@ -377,14 +384,15 @@ public class HomeFragment extends Fragment {
 
     private void adsBannerList() {
 
-
+        pDialog = new ProgressBarHandler(getActivity());
+        pDialog.show();
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/genre_list_api.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //  progressDialog.dismiss();
+                        pDialog.hide();
 
                         try {
                             Log.d(" response is ", response);
@@ -456,15 +464,15 @@ public class HomeFragment extends Fragment {
     }
     private void latestreleasesBannerList() {
 
-
+        pDialog = new ProgressBarHandler(getActivity());
+        pDialog.show();
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/banners.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        //  progressDialog.dismiss();
-
+                        pDialog.hide();
                         try {
                             Log.d(" response is ", response);
 

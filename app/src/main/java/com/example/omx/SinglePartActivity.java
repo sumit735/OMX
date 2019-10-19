@@ -82,6 +82,12 @@ public class SinglePartActivity extends AppCompatActivity {
         genre = getIntent().getStringExtra("MovieGenre");
         movieId = getIntent().getStringExtra("MovieID");
 
+        if (genre != null){
+            genreValue.setText(genre);
+        }else{
+            genreValue.setVisibility(View.GONE);
+        }
+
         Glide.with(SinglePartActivity.this)
                 .load(bannerUrl)
                 .thumbnail(0.5f)
@@ -93,7 +99,7 @@ public class SinglePartActivity extends AppCompatActivity {
         movieDetailTitle.setText(title);
         movieStory.setText(story);
         movieDuration.setText(duration);
-        genreValue.setText(genre);
+
 
         Typeface submitButtonTypeface = Typeface.createFromAsset(getAssets(),getResources().getString(R.string.exo));
         movieDetailTitle.setTypeface(submitButtonTypeface);

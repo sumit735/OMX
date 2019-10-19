@@ -208,6 +208,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String response = stringBuilder.toString();
                 JSONObject jsonResponse = new JSONObject(response);
 
+                Log.v("SUBHA","message == " + jsonResponse.getString("message"));
+
                 JSONObject object = jsonResponse.getJSONObject("data");
 
                 String name = object.getString("firstname");

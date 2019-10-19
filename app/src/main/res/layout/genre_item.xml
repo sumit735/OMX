@@ -2,9 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/genreViewLayout"
-    android:layout_width="100dp"
+    android:layout_width="120dp"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="2dp"
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
     android:focusable="false">
@@ -17,18 +17,29 @@
 
         <ImageView
             android:id="@+id/movieImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/reg_screen_landscape" />
 
+        <ImageView
+            android:id="@+id/movieImageOverlay"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:background="@drawable/content_list_overlay"
+
+            />
 
         <TextView
             android:id="@+id/movieTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/movieImageView"
+            android:layout_alignBaseline="@+id/movieImageOverlay"
             android:layout_alignLeft="@+id/movieImageView"
             android:layout_alignRight="@+id/movieImageView"
             android:layout_centerInParent="true"
@@ -43,7 +54,7 @@ android:textAlignment="center"
             android:text="Action"
             android:textColor="@color/contentTitleColor"
             android:textSize="16sp"
-            android:textStyle="normal" />
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

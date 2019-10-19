@@ -14,6 +14,7 @@ import android.widget.VideoView;
 
 public class PlayerActivity extends AppCompatActivity {
 
+    ProgressBarHandler pDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +23,8 @@ public class PlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_player);
 
         VideoView videoView =(VideoView)findViewById(R.id.videoView1);
+        pDialog = new ProgressBarHandler(PlayerActivity.this);
+        pDialog.show();
 
         Display display = ((WindowManager) getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
 //orientation will contain Configuration.ORIENTATION_PORTRAIT or Configuration.ORIENTATION_LANDSCAPE
@@ -43,6 +46,7 @@ public class PlayerActivity extends AppCompatActivity {
         videoView.setVideoURI(uri);
         videoView.requestFocus();
         videoView.start();
+        pDialog.hide();
 
     }
 

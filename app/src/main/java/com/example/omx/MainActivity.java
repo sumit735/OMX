@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         mTitle = mDrawerTitle = getTitle();
-        mNavigationDrawerItemTitles= getResources().getStringArray(R.array.navigation_drawer_items_array);
+        mNavigationDrawerItemTitles = getResources().getStringArray(R.array.navigation_drawer_items_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame
-                        ,new HomeFragment())
+                        , new HomeFragment())
                 .commit();
 
         setupToolbar();
@@ -59,16 +59,16 @@ public class MainActivity extends AppCompatActivity {
 
         DataModel[] drawerItem = new DataModel[6];
 
-        drawerItem[0] = new DataModel(R.drawable.home,"Home");
-        drawerItem[1] = new DataModel(R.drawable.films,"Movies");
-        drawerItem[2] = new DataModel( R.drawable.web_series,"Web Series");
-        drawerItem[3] = new DataModel( R.drawable.short_films,"Short Movies");
-        drawerItem[4] = new DataModel( R.drawable.songs,"Songs");
-        drawerItem[5] = new DataModel( R.drawable.logout,"Logout");
+        drawerItem[0] = new DataModel(R.drawable.home, "Home");
+        drawerItem[1] = new DataModel(R.drawable.films, "Movies");
+        drawerItem[2] = new DataModel(R.drawable.web_series, "Web Series");
+        drawerItem[3] = new DataModel(R.drawable.short_films, "Short Movies");
+        drawerItem[4] = new DataModel(R.drawable.songs, "Songs");
+        drawerItem[5] = new DataModel(R.drawable.logout, "Logout");
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this,R.layout.list_view_item_row, drawerItem);
+        DrawerItemCustomAdapter adapter = new DrawerItemCustomAdapter(this, R.layout.list_view_item_row, drawerItem);
         mDrawerList.setAdapter(adapter);
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -113,16 +113,16 @@ public class MainActivity extends AppCompatActivity {
                 dlgAlert.setMessage("Are you sure to logout ?");
                 dlgAlert.setTitle("");
 
-                dlgAlert.setPositiveButton("YES" ,new DialogInterface.OnClickListener() {
+                dlgAlert.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {
                         // Do nothing but close the dialog
 
                         // dialog.cancel();
-                       Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
 
-                        intent.putExtra("LOGOUT","1");
-                        sharedPreferenceClass.setValue_string("LOGIN_STATUS","0");
+                        intent.putExtra("LOGOUT", "1");
+                        sharedPreferenceClass.setValue_string("LOGIN_STATUS", "0");
                         startActivity(intent);
 
                         finish();
@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -190,15 +189,17 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
     }
 
-    void setupToolbar(){
+    void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
-    void setupDrawerToggle(){
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,toolbar,R.string.app_name, R.string.app_name);
+    void setupDrawerToggle() {
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.app_name, R.string.app_name);
         //This is necessary to change the icon of the Drawer Toggle upon state change.
         mDrawerToggle.syncState();
     }
+
+
 }

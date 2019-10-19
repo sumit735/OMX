@@ -33,18 +33,7 @@
         android:scrollbars="none"
         android:horizontalSpacing="6dp"
         android:verticalSpacing="6dp"></GridView>
-    <!--<com.twotoasters.jazzylistview.JazzyGridView
-        android:id="@+id/imagesGridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:numColumns="2"
-        android:layout_marginRight="3dp"
-        android:layout_marginLeft="3dp"
-        android:horizontalSpacing="8dp"
-        android:verticalSpacing="8dp"
-        app:only_animate_new_items="false" />
--->
+
     <RelativeLayout
         android:id="@+id/loadingPanel"
         android:layout_width="match_parent"

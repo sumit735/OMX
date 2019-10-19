@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Flimy+</string>
+    <string name="app_name">Flimy Plus</string>
     <string name="fb_registration_text">Register With Facebook</string>
     <string name="fb_login_text">Login With Facebook</string>
     <string name="drawer_open">Open</string>

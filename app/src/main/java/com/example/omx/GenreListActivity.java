@@ -186,6 +186,7 @@ public class GenreListActivity extends AppCompatActivity {
                 intent.putExtra("MovieGenre",item.getMovieGenre());
                 intent.putExtra("MovieDuration",item.getMovieDuration());
                 intent.putExtra("MovieID",item.getId());
+                startActivity(intent);
 
             }
         });

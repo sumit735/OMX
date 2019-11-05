@@ -176,17 +176,15 @@ ProgressBarHandler pDialog;
         asyncReg.executeOnExecutor(threadPoolExecutor);
     }
 
-    public class WatchHistoryList extends AsyncTask<Void, String, JSONArray> {
+    public class GetUserDetails extends AsyncTask<Void, String, JSONArray> {
         JSONArray array;
         ProgressBarHandler pDialog;
-
-        @SuppressLint("WrongThread")
         @Override
         protected JSONArray doInBackground(Void... params) {
 
             try {
 
-                URL url = new URL("http://3.81.18.178/oflix/api/recently_watched_display.php");
+                URL url = new URL("http://3.81.18.178/rest/api/login.php");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -207,6 +205,7 @@ ProgressBarHandler pDialog;
                 }
 
 
+
                 DataOutputStream outputStream = new DataOutputStream(httpURLConnection.getOutputStream());
                 outputStream.write(postData.toString().getBytes("UTF-8"));
 
@@ -222,57 +221,34 @@ ProgressBarHandler pDialog;
                 bufferedReader.close();
 
                 String response = stringBuilder.toString();
-                // JSONObject jsonResponse = new JSONObject(response);
+                JSONObject jsonResponse = new JSONObject(response);
 
-                try {
-                    Log.d(" response is ", response);
+                JSONObject object = jsonResponse.getJSONObject("data");
 
-                    JSONArray jsonObject = new JSONArray(response);
-
-                    //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
-                    if (response != null) {
-
-                        Log.v("SUBHA", "api res == " + jsonObject);
+                String name = object.getString("firstname");
+                String mobile = object.getString("mnumber");
+                String user_id = object.getString("id");
 
 
-                        int lengthJsonArr = jsonObject.length();
-                        JSONObject jsonChildNode;
-                        Log.v("SUBHA", "api res == " + lengthJsonArr);
-                        for (int i = 0; i < lengthJsonArr; i++) {
-                            RecentwatchItem movie = new RecentwatchItem();
-                            jsonChildNode = jsonObject.getJSONObject(i);
+                sharedPreferenceClass.setValue_string("LOGIN_STATUS","1");
+                sharedPreferenceClass.setValue_string("LOGIN_ID",user_id);
+                sharedPreferenceClass.setValue_string("MOBILE_ID",mobile);
+                sharedPreferenceClass.setValue_string("NAME_STR",name);
 
 
-                            movie.setId(jsonChildNode.getString("id"));
-                            movie.setTitle(jsonChildNode.getString("name"));
-                            movie.setImageId(jsonChildNode.getString("image"));
-                            movie.setShort_desc(jsonChildNode.getString("details"));
-                            movie.setVideoUrl(jsonChildNode.getString("url"));
-                            movie.setBannerImage(jsonChildNode.getString("banner_image"));
-                            movie.setMovieDuration(jsonChildNode.getString("total_time"));
-                            movie.setMovieGenre(jsonChildNode.getString("genre"));
-
-                            recentwatchItems.add(movie);
+                Log.v("SUBHA","Login ID == " + jsonResponse);
+                // }
 
 
-                        }
-
-                        mAdapter = new MovieAdapter(recentwatchItems, getContext());
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
-                        my_recycler_view.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
-                        my_recycler_view.setItemAnimator(new DefaultItemAnimator());
-                        my_recycler_view.setAdapter(mAdapter);
 
 
-                    } else {
-                        Toast.makeText(context, "No Recently Watched Videos", Toast.LENGTH_SHORT).show();
-                    }
+
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+                pDialog.hide();
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
 
             } catch (Exception e) {
@@ -287,6 +263,8 @@ ProgressBarHandler pDialog;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            pDialog = new ProgressBarHandler(LoginActivity.this);
+            pDialog.show();
 
         }
 
@@ -297,7 +275,6 @@ ProgressBarHandler pDialog;
 
         }
     }
-
     private void callData() {
 
         pDialog = new ProgressBarHandler(getActivity());

@@ -17,6 +17,65 @@
             android:orientation="vertical"
             android:background="@color/white">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/my_recycler_view"
+                android:layout_margin="3dp"
+                android:orientation="horizontal">
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:scrollbars="none"
+                    android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp">
+
+                        <Button
+                            android:id="@+id/latest_movies"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/latestvideos_bkg"
+                            android:textColor="@color/white"
+                            android:text="MOVIES" />
+
+                        <Button
+                            android:id="@+id/latest_webseries"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/latestvideos_bkg"
+                            android:textColor="@color/white"
+                            android:text="Webseries" />
+
+                        <Button
+                            android:id="@+id/latest_shortfilms"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/latestvideos_bkg"
+                            android:textColor="@color/white"
+                            android:text="Short Films" />
+
+                        <Button
+                            android:id="@+id/latest_songs"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/latestvideos_bkg"
+                            android:text="Songs"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+
+
+            </LinearLayout>
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/adspager"
                 android:layout_width="match_parent"
@@ -59,95 +118,11 @@
                 android:scrollbars="none"
                 android:layout_margin="2dp"
                 android:visibility="visible" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Genres"
-                android:textStyle="bold"
-                android:layout_marginLeft="2dp"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/genreListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/pager2"
-                android:layout_centerHorizontal="true"
-                android:scrollbars="none"
-                android:layout_margin="2dp"
-
-             />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Latest Releases"
-                android:textStyle="bold"
-                android:layout_marginLeft="2dp"
-                android:padding="5dp"
-                android:textColor="@color/black"
-                android:textSize="18dp"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/my_recycler_view"
-                android:layout_margin="3dp"
-                android:orientation="horizontal">
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:scrollbars="none"
-                    android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp">
-
-                <Button
-                    android:id="@+id/latest_movies"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/latestvideos_bkg"
-                    android:textColor="@color/white"
-                    android:text="MOVIES" />
-
-                <Button
-                    android:id="@+id/latest_webseries"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/latestvideos_bkg"
-                    android:textColor="@color/white"
-                    android:text="Webseries" />
-
-                <Button
-                    android:id="@+id/latest_shortfilms"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/latestvideos_bkg"
-                    android:textColor="@color/white"
-                    android:text="Short Films" />
-
-                <Button
-                    android:id="@+id/latest_songs"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/latestvideos_bkg"
-                    android:textColor="@color/white"
-                    android:text="Songs" />
-                </LinearLayout>
-                </HorizontalScrollView>
 
 
 
-            </LinearLayout>
+
+
 
 
         </LinearLayout>

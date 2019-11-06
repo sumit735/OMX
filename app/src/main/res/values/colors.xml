@@ -31,5 +31,7 @@
     <color name="contentTitleColor">#ffffff</color>
     <color name="windowBackground">#00000000</color>
     <color name="latest_bkg">#CA0D0D</color>
+    <color name="text_color">#000000</color>
+
 
 </resources>

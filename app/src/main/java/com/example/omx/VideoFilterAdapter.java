@@ -66,8 +66,6 @@ public class VideoFilterAdapter extends ArrayAdapter<GridItem> {
             Glide.with(context)
                     .load(item.getImageId())
                     .thumbnail(0.5f)
-                    .crossFade()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.videoImageview);
 
 

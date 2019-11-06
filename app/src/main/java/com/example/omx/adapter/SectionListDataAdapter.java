@@ -1,4 +1,4 @@
-package com.home.vod.adapter;
+package com.example.omx.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.home.vod.R;
-import com.home.vod.activity.MovieDetailsActivity;
-import com.home.vod.activity.ShowWithEpisodesActivity;
-import com.home.vod.glide.GlideApp;
-import com.home.vod.model.SingleItemModel;
-import com.home.vod.preferences.PreferenceManager;
-import com.home.vod.util.FontUtls;
-import com.home.vod.util.LogUtil;
+import com.bumptech.glide.Glide;
+import com.example.omx.R;
+import com.example.omx.SinglePartActivity;
+import com.example.omx.model.SingleItemModel;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -33,7 +30,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.home.vod.util.Constant.PERMALINK_INTENT_KEY;
 
 public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListDataAdapter.SingleItemRowHolder> {
 
@@ -49,7 +45,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
 
 
-    PreferenceManager preferenceManager;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
     int keepAliveTime = 10;
@@ -79,7 +74,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         this.itemsList = itemsList;
         this.mContext = context;
         this.layoutname = layoutname;
-        preferenceManager =  PreferenceManager.getPreferenceManager(context);
 
     }
    /* @Override
@@ -105,12 +99,10 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     public void onBindViewHolder(SingleItemRowHolder holder, int i) {
 
         SingleItemModel singleItem = itemsList.get(i);
-        FontUtls.loadFont(mContext,mContext.getResources().getString(R.string.regular_fonts),holder.itemTitle);
 
       /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
         holder.itemTitle.setTypeface(castDescriptionTypeface);*/
 
-        Log.v("BIBHU12", "section adapter ==============" + i);
 
         holder.itemTitle.setText(singleItem.getTitle());
         holder.position = i;
@@ -140,11 +132,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
                         .error(R.drawable.logo)      // optional
                         .into(holder.itemImage);*/
 
-                 GlideApp.with(mContext)
+                 Glide.with(mContext)
                         .load(singleItem.getImage())
-                        .placeholder(R.drawable.logo)
-                        .error(R.drawable.logo)
-                       // .bitmapTransform(new RoundedCornersTransformation( mContext,sCorner, sMargin))//added by Debashish for rounded corner transformation
                         .into(holder.itemImage);
 
 
@@ -158,12 +147,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     @Override
     public int getItemCount() {
 
-        // Kushal- to retuen only 5 values in Feature section in homePage
-        if(itemsList.size()>Integer.parseInt(mContext.getResources().getString(R.string.Feature_section_limit)))
-            return Integer.parseInt(mContext.getResources().getString(R.string.Feature_section_limit));
-        else
+
             return itemsList.size();
-        //return itemsList.size();
     }
 
     public class SingleItemRowHolder extends RecyclerView.ViewHolder {
@@ -177,8 +162,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         public SingleItemRowHolder(View view) {
             super(view);
 
-            this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
-            this.itemImage = (ImageView) view.findViewById(R.id.itemImage);
+          /*  this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
+            this.itemImage = (ImageView) view.findViewById(R.id.itemImage);*/
 
 
             try {
@@ -191,23 +176,19 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String moviePermalink = itemsList.get(position).getPermalink();
+                    /*String moviePermalink = itemsList.get(position).getPermalink();
                     String movieTypeId = itemsList.get(position).getVideoTypeId();
 
-                    LogUtil.showLog("MUVI","HHH"+moviePermalink + movieTypeId);
-                    if ((movieTypeId.trim().equalsIgnoreCase("1")) || (movieTypeId.trim().equalsIgnoreCase("2")) || (movieTypeId.trim().equalsIgnoreCase("4"))) {
-                        final Intent detailsIntent = new Intent(mContext, MovieDetailsActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        mContext.startActivity(detailsIntent);
-
-                    } else if ((movieTypeId.trim().equalsIgnoreCase("3"))) {
-                        final Intent detailsIntent = new Intent(mContext, ShowWithEpisodesActivity.class);
-                        detailsIntent.putExtra(PERMALINK_INTENT_KEY, moviePermalink);
-                        detailsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                        mContext.startActivity(detailsIntent);
-
-                    }
+                    Intent intent = new Intent(mContext, SinglePartActivity.class);
+                    intent.putExtra("MovieTitle",item.getTitle());
+                    intent.putExtra("MovieImage",item.getImageId());
+                    intent.putExtra("MovieDetails",item.getShort_desc());
+                    intent.putExtra("MovieUrl",item.getVideoUrl());
+                    intent.putExtra("MovieBanner",item.getBannerImage());
+                    intent.putExtra("MovieGenre",item.getMovieGenre());
+                    intent.putExtra("MovieDuration",item.getMovieDuration());
+                    intent.putExtra("MovieID",item.getId());
+                    mContext.startActivity(intent);*/
 
 
                 }

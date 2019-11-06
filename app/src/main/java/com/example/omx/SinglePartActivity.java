@@ -91,8 +91,6 @@ public class SinglePartActivity extends AppCompatActivity {
         Glide.with(SinglePartActivity.this)
                 .load(bannerUrl)
                 .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(bannerImageView);
 
 

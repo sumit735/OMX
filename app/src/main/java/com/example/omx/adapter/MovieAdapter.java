@@ -60,8 +60,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         Glide.with(context)
                 .load(movie.getImageId())
                 .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.movieImageView);
 
         holder.listViewLayout.setOnClickListener(new View.OnClickListener() {

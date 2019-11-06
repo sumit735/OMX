@@ -51,8 +51,6 @@ public class NewReleasesAdapter extends RecyclerView.Adapter<NewReleasesAdapter.
         Glide.with(context)
                 .load(movie.getImage())
                 .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.movieImageView);
     }
 

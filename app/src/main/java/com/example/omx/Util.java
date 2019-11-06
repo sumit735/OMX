@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,4 +56,5 @@ public class Util {
         }
         return true;
     }
+    public static ArrayList<Integer> image_orentiation = new ArrayList<>();
 }

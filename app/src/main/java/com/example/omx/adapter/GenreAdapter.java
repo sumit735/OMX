@@ -60,8 +60,6 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.MyViewHolder
         Glide.with(context)
                 .load(movie.getImage())
                 .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.movieImageView);
 
         holder.genreViewLayout.setOnClickListener(new View.OnClickListener() {

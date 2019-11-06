@@ -28,13 +28,18 @@ import com.example.omx.adapter.GenreAdapter;
 import com.example.omx.adapter.MovieAdapter;
 import com.example.omx.adapter.AdsAdapter;
 import com.example.omx.adapter.NewReleasesAdapter;
+import com.example.omx.adapter.RecyclerViewDataAdapter;
 import com.example.omx.model.AdsItem;
 import com.example.omx.model.BannerItem;
 import com.example.omx.model.GenreItem;
 import com.example.omx.model.GetMenuItem;
 import com.example.omx.model.GridItem;
+import com.example.omx.model.HomeFeaturePageSectionDetailsModel;
+import com.example.omx.model.HomeFeaturePageSectionModel;
 import com.example.omx.model.RecentwatchItem;
+import com.example.omx.model.SectionDataModel;
 import com.example.omx.model.SharedPreferenceClass;
+import com.example.omx.model.SingleItemModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment {
 
-ProgressBarHandler pDialog;
+    ProgressBarHandler pDialog;
     Context context;
     ArrayList<GenreItem> genreItems = new ArrayList<GenreItem>();
     ArrayList<AdsItem> adsItems = new ArrayList<AdsItem>();
@@ -82,10 +87,15 @@ ProgressBarHandler pDialog;
     SharedPreferenceClass sharedPreferenceClass;
     ArrayList<GridItem> itemData = new ArrayList<GridItem>();
     ArrayList<RecentwatchItem> recentwatchItems = new ArrayList<RecentwatchItem>();
+    ArrayList<HomeFeaturePageSectionModel> homePageSectionModelArrayList = new ArrayList<HomeFeaturePageSectionModel>();
     int keepAliveTime = 10;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
-    WatchHistoryList asyncReg;
+    String sectionName,sectionId;
+    ArrayList<SingleItemModel> singleItem = new ArrayList<SingleItemModel>();
+    ArrayList<SectionDataModel> allSampleData;
+    GetUserDetails asyncReg;
+    RecyclerViewDataAdapter adapter;
     BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
@@ -95,17 +105,18 @@ ProgressBarHandler pDialog;
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         menuItems = new ArrayList<GetMenuItem>();
-        my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
+        allSampleData = new ArrayList<SectionDataModel>();
         adspager = (RecyclerView) v.findViewById(R.id.adspager);
+        my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
         bannerpager = (RecyclerView) v.findViewById(R.id.bannerpager);
         loadingPanel = (RelativeLayout) v.findViewById(R.id.loadingPanel);
-        genreListView = (RecyclerView) v.findViewById(R.id.genreListView);
         latest_movies = (Button) v.findViewById(R.id.latest_movies);
         latest_webseries = (Button) v.findViewById(R.id.latest_webseries);
         latest_shortfilms = (Button) v.findViewById(R.id.latest_shortfilms);
         latest_songs = (Button) v.findViewById(R.id.latest_songs);
         sharedPreferenceClass = new SharedPreferenceClass(getActivity());
 
+        mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
 
         latest_movies.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,13 +157,6 @@ ProgressBarHandler pDialog;
         latestreleasesBannerList();
 
 
-
-
-        asyncReg = new WatchHistoryList();
-        asyncReg.executeOnExecutor(threadPoolExecutor);
-
-
-
         return v;
 
 
@@ -166,25 +170,25 @@ ProgressBarHandler pDialog;
     }
 
 
-
     @Override
     public void onResume() {
 
         super.onResume();
 
-        asyncReg = new WatchHistoryList();
-        asyncReg.executeOnExecutor(threadPoolExecutor);
+
     }
 
     public class GetUserDetails extends AsyncTask<Void, String, JSONArray> {
         JSONArray array;
         ProgressBarHandler pDialog;
+
+        @SuppressLint("WrongThread")
         @Override
         protected JSONArray doInBackground(Void... params) {
 
             try {
 
-                URL url = new URL("http://3.81.18.178/rest/api/login.php");
+                URL url = new URL("http://3.81.18.178/oflix/api/homepagev2.php?appid=735426");
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                 httpURLConnection.setRequestMethod("GET");
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
@@ -205,7 +209,6 @@ ProgressBarHandler pDialog;
                 }
 
 
-
                 DataOutputStream outputStream = new DataOutputStream(httpURLConnection.getOutputStream());
                 outputStream.write(postData.toString().getBytes("UTF-8"));
 
@@ -221,33 +224,73 @@ ProgressBarHandler pDialog;
                 bufferedReader.close();
 
                 String response = stringBuilder.toString();
-                JSONObject jsonResponse = new JSONObject(response);
-
-                JSONObject object = jsonResponse.getJSONObject("data");
-
-                String name = object.getString("firstname");
-                String mobile = object.getString("mnumber");
-                String user_id = object.getString("id");
+                JSONArray myJson = new JSONArray(response);
 
 
-                sharedPreferenceClass.setValue_string("LOGIN_STATUS","1");
-                sharedPreferenceClass.setValue_string("LOGIN_ID",user_id);
-                sharedPreferenceClass.setValue_string("MOBILE_ID",mobile);
-                sharedPreferenceClass.setValue_string("NAME_STR",name);
+                HomeFeaturePageSectionModel homeFeaturePageSectionModel;
+
+                if (myJson.length() > 0) {
+                    for (int j = 0; j < myJson.length(); j++) {
+                        homeFeaturePageSectionModel = new HomeFeaturePageSectionModel();
+                        JSONObject jsonChildNode = myJson.getJSONObject(j);
+
+                        homeFeaturePageSectionModel.setSection_id(jsonChildNode.optString("id"));
+                        homeFeaturePageSectionModel.setTitle(jsonChildNode.optString("name"));
+
+                        sectionId = jsonChildNode.optString("id");
+                        sectionName = jsonChildNode.optString("name");
+
+                        JSONArray section_item_list = jsonChildNode.optJSONArray("data");
+                        ArrayList<HomeFeaturePageSectionDetailsModel> arrayList = new ArrayList<>();
+
+                        if (section_item_list.length() > 0) {
+                            for (int k = 0; k < section_item_list.length(); k++) {
 
 
-                Log.v("SUBHA","Login ID == " + jsonResponse);
-                // }
+                                HomeFeaturePageSectionDetailsModel homeFeaturePageSectionDetailsModel = new HomeFeaturePageSectionDetailsModel();
+                                JSONObject object = section_item_list.getJSONObject(k);
+
+                                homeFeaturePageSectionDetailsModel.setName(object.optString("name"));
+                                homeFeaturePageSectionDetailsModel.setBanner(object.optString("banner"));
+                                homeFeaturePageSectionDetailsModel.setDetails(object.optString("details"));
+                                homeFeaturePageSectionDetailsModel.setGenre(object.optString("genre"));
+                                homeFeaturePageSectionDetailsModel.setId(object.optString("id"));
+                                homeFeaturePageSectionDetailsModel.setTotal_time(object.optString("total_time"));
+                                homeFeaturePageSectionDetailsModel.setUrl(object.optString("url"));
+                                homeFeaturePageSectionDetailsModel.setImage(object.optString("image"));
+
+                                String name = object.optString("name");
+                                String banner = object.optString("banner");
+                                String details = object.optString("details");
+                                String genre = object.optString("genre");
+                                String id = object.optString("id");
+                                String total_time = object.optString("total_time");
+                                String videourl = object.optString("url");
+                                String image = object.optString("image");
+
+                                arrayList.add(homeFeaturePageSectionDetailsModel);
+
+                                singleItem.add(new SingleItemModel(id,name,genre,videourl,details,banner,total_time));
+                            }
+                        }
+
+                        homeFeaturePageSectionModel.setHomeFeaturePageSectionDetailsModel(arrayList);
+                        homePageSectionModelArrayList.add(homeFeaturePageSectionModel);
+                    }
+                    allSampleData.add(new SectionDataModel(sectionId,sectionName, singleItem));
+
+                }
 
 
 
+                my_recycler_view.setLayoutManager(mLayoutManager);
+                adapter = new RecyclerViewDataAdapter(context, allSampleData);
+                my_recycler_view.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
 
 
-                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                startActivity(intent);
-                finish();
-                pDialog.hide();
 
+                Log.v("SUBHA", "Login ID == " + allSampleData.size());
 
 
 
@@ -263,7 +306,7 @@ ProgressBarHandler pDialog;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressBarHandler(LoginActivity.this);
+            pDialog = new ProgressBarHandler(getActivity());
             pDialog.show();
 
         }
@@ -275,7 +318,8 @@ ProgressBarHandler pDialog;
 
         }
     }
-    private void callData() {
+
+    private void adsBannerList() {
 
         pDialog = new ProgressBarHandler(getActivity());
         pDialog.show();
@@ -285,7 +329,7 @@ ProgressBarHandler pDialog;
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       pDialog.hide();
+                        pDialog.hide();
 
                         try {
                             Log.d(" response is ", response);
@@ -295,34 +339,32 @@ ProgressBarHandler pDialog;
                             //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
 
 
-                            Log.v("SUBHA","api res == " + jsonObject);
-
+                            Log.v("SUBHA", "api res == " + jsonObject);
 
 
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
-                            Log.v("SUBHA","api res == " + lengthJsonArr);
+                            Log.v("SUBHA", "api res == " + lengthJsonArr);
                             for (int i = 0; i < lengthJsonArr; i++) {
-                                GenreItem movie = new GenreItem();
+                                AdsItem movie = new AdsItem();
                                 jsonChildNode = jsonObject.getJSONObject(i);
 
                                 movie.setId(jsonChildNode.getString("id"));
-                                movie.setTitle(jsonChildNode.getString("genre"));
                                 movie.setImage(jsonChildNode.getString("genre_image"));
 
-                                genreItems.add(movie);
+                                adsItems.add(movie);
 
 
                             }
 
-                            genreAdapter = new GenreAdapter(genreItems, getContext());
+                            AdsAdapter adsAdapter = new AdsAdapter(bannerItems, getActivity());
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
-                            genreListView.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
-                            genreListView.setItemAnimator(new DefaultItemAnimator());
-                            genreListView.setAdapter(genreAdapter);
+                            adspager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
+                            adspager.setItemAnimator(new DefaultItemAnimator());
+                            adspager.setAdapter(adsAdapter);
 
-                            asyncReg = new WatchHistoryList();
+                            asyncReg = new GetUserDetails();
                             asyncReg.executeOnExecutor(threadPoolExecutor);
 
                         } catch (JSONException e) {
@@ -359,86 +401,6 @@ ProgressBarHandler pDialog;
         VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
     }
 
-    private void adsBannerList() {
-
-        pDialog = new ProgressBarHandler(getActivity());
-        pDialog.show();
-        String tag_json_req = "user_login";
-        StringRequest data = new StringRequest(Request.Method.POST,
-                "http://3.81.18.178/oflix/api/genre_list_api.php?appid=735426",
-                new com.android.volley.Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        pDialog.hide();
-
-                        try {
-                            Log.d(" response is ", response);
-
-                            JSONArray jsonObject = new JSONArray(response);
-
-                            //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
-
-
-                            Log.v("SUBHA","api res == " + jsonObject);
-
-
-
-                            int lengthJsonArr = jsonObject.length();
-                            JSONObject jsonChildNode;
-                            Log.v("SUBHA","api res == " + lengthJsonArr);
-                            for (int i = 0; i < lengthJsonArr; i++) {
-                                AdsItem movie = new AdsItem();
-                                jsonChildNode = jsonObject.getJSONObject(i);
-
-                                movie.setId(jsonChildNode.getString("id"));
-                                movie.setImage(jsonChildNode.getString("genre_image"));
-
-                                adsItems.add(movie);
-
-
-                            }
-
-                            AdsAdapter adsAdapter = new AdsAdapter(bannerItems,getActivity());
-                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
-                            adspager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
-                            adspager.setItemAnimator(new DefaultItemAnimator());
-                            adspager.setAdapter(adsAdapter);
-                            callData();
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error.getMessage() == null) {
-
-                } else
-                    Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
-
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                Map<String, String> params = new HashMap<>();
-               /* params.put("method","citizenLogin");
-                params.put("strUserName",regEmailStr);
-                params.put("strPassword",regPasswordStr);
-*/
-
-                Log.d("params are :", "" + params);
-                return params;
-            }
-        };
-        data.setShouldCache(false);
-        data.setRetryPolicy(new
-                DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
-    }
     private void latestreleasesBannerList() {
 
         pDialog = new ProgressBarHandler(getActivity());
@@ -458,13 +420,12 @@ ProgressBarHandler pDialog;
                             //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
 
 
-                            Log.v("SUBHA","api res == " + jsonObject);
-
+                            Log.v("SUBHA", "api res == " + jsonObject);
 
 
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
-                            Log.v("SUBHA","api res == " + lengthJsonArr);
+                            Log.v("SUBHA", "api res == " + lengthJsonArr);
                             for (int i = 0; i < lengthJsonArr; i++) {
                                 BannerItem movie = new BannerItem();
                                 jsonChildNode = jsonObject.getJSONObject(i);
@@ -477,7 +438,7 @@ ProgressBarHandler pDialog;
 
                             }
 
-                            NewReleasesAdapter adsAdapter = new NewReleasesAdapter(bannerItems,getActivity());
+                            NewReleasesAdapter adsAdapter = new NewReleasesAdapter(bannerItems, getActivity());
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
                             bannerpager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
@@ -485,8 +446,6 @@ ProgressBarHandler pDialog;
                             bannerpager.setAdapter(adsAdapter);
 
                             adsBannerList();
-
-
 
 
                         } catch (JSONException e) {

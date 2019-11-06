@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
 
 
-                Toast.makeText(LoginActivity.this, "OOPS INVALID EMAIL", Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, "OOPS INVALID PHONE", Toast.LENGTH_LONG).show();
             }
         } else {
 

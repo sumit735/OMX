@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="none"
+        >
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/home"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_movies"
+            android:icon="@drawable/films"
+            android:title="Movies" />
+        <item
+            android:id="@+id/nav_songs"
+            android:icon="@drawable/songs"
+            android:title="Songs" />
+        <item
+            android:id="@+id/nav_webseries"
+            android:icon="@drawable/web_series"
+            android:title="Web Series" />
+        <item
+            android:id="@+id/nav_shortmovies"
+            android:icon="@drawable/short_films"
+            android:title="Short Movies" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+    </group>
+
+
+
+</menu>

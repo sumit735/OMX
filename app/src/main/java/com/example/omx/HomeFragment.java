@@ -63,7 +63,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment {
 
-    ProgressBarHandler pDialog;
+ProgressBarHandler pDialog;
     Context context;
     ArrayList<GenreItem> genreItems = new ArrayList<GenreItem>();
     ArrayList<AdsItem> adsItems = new ArrayList<AdsItem>();
@@ -157,6 +157,13 @@ public class HomeFragment extends Fragment {
         latestreleasesBannerList();
 
 
+
+
+        asyncReg = new WatchHistoryList();
+        asyncReg.executeOnExecutor(threadPoolExecutor);
+
+
+
         return v;
 
 
@@ -168,6 +175,7 @@ public class HomeFragment extends Fragment {
         // To prevent a memory leak on rotation, make sure to call stopAutoCycle() on the slider before activity or fragment is destroyed
         super.onStop();
     }
+
 
 
     @Override
@@ -342,6 +350,7 @@ public class HomeFragment extends Fragment {
                             Log.v("SUBHA", "api res == " + jsonObject);
 
 
+
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
                             Log.v("SUBHA", "api res == " + lengthJsonArr);
@@ -423,6 +432,7 @@ public class HomeFragment extends Fragment {
                             Log.v("SUBHA", "api res == " + jsonObject);
 
 
+
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
                             Log.v("SUBHA", "api res == " + lengthJsonArr);
@@ -446,6 +456,8 @@ public class HomeFragment extends Fragment {
                             bannerpager.setAdapter(adsAdapter);
 
                             adsBannerList();
+
+
 
 
                         } catch (JSONException e) {

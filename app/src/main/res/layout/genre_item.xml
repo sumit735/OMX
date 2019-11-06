@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/genreViewLayout"
-    android:layout_width="120dp"
+    android:layout_width="145dp"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
     android:background="@drawable/grid_color_selector"
@@ -17,16 +17,16 @@
 
         <ImageView
             android:id="@+id/movieImageView"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="145dp"
+            android:layout_height="81dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/reg_screen_landscape" />
 
         <ImageView
             android:id="@+id/movieImageOverlay"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="145dp"
+            android:layout_height="81dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"

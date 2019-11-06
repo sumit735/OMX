@@ -10,6 +10,16 @@ public class GridItem {
     private String movieDuration;
     private String movieGenre;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private String name;
+
     public String getId() {
         return id;
     }

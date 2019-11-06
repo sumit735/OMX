@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.omx.R;
 import com.example.omx.model.DataModel;
 
@@ -18,7 +20,8 @@ public class DrawerItemCustomAdapter extends ArrayAdapter<DataModel> {
     int layoutResourceId;
     DataModel data[] = null;
 
-    public DrawerItemCustomAdapter(Context mContext, int layoutResourceId, DataModel[] data) {
+    public
+    DrawerItemCustomAdapter(Context mContext, int layoutResourceId, DataModel[] data) {
 
         super(mContext, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
@@ -36,6 +39,7 @@ public class DrawerItemCustomAdapter extends ArrayAdapter<DataModel> {
 
         ImageView imageViewIcon = (ImageView) listItem.findViewById(R.id.imageViewIcon);
         TextView textViewName = (TextView) listItem.findViewById(R.id.textViewName);
+        Toolbar toolbar = (Toolbar) listItem.findViewById(R.id.toolbar);
 
         DataModel folder = data[position];
 

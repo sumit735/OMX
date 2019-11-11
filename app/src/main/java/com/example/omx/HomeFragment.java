@@ -157,6 +157,7 @@ public class HomeFragment extends Fragment {
         });
         latestreleasesBannerList();
 
+
         return v;
 
 
@@ -203,7 +204,6 @@ public class HomeFragment extends Fragment {
                 try {
                     postData.put("userId", sharedPreferenceClass.getValue_string("LOGIN_ID"));
 
-                    Log.v("SUBHA", "json Data == " + postData.toString());
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -251,17 +251,12 @@ public class HomeFragment extends Fragment {
             super.onPostExecute(array);
             try {
 
-                String name = "", banner = "", details = "", genre = "", id = "", total_time = "", videourl = "", imagedata = "";
-
-                HomeFeaturePageSectionModel homeFeaturePageSectionModel;
+                allSampleData.clear();
 
                 if (array.length() > 0) {
                     for (int j = 0; j < array.length(); j++) {
-                        homeFeaturePageSectionModel = new HomeFeaturePageSectionModel();
                         JSONObject jsonChildNode = array.getJSONObject(j);
 
-                        homeFeaturePageSectionModel.setSection_id(jsonChildNode.optString("id"));
-                        homeFeaturePageSectionModel.setTitle(jsonChildNode.optString("name"));
 
                         sectionId = jsonChildNode.optString("id");
                         sectionName = jsonChildNode.optString("name");
@@ -273,17 +268,8 @@ public class HomeFragment extends Fragment {
                             for (int k = 0; k < section_item_list.length(); k++) {
 
 
-                                HomeFeaturePageSectionDetailsModel homeFeaturePageSectionDetailsModel = new HomeFeaturePageSectionDetailsModel();
                                 JSONObject object = section_item_list.getJSONObject(k);
 
-                                homeFeaturePageSectionDetailsModel.setName(object.optString("name"));
-                                homeFeaturePageSectionDetailsModel.setBanner(object.optString("banner_image"));
-                                homeFeaturePageSectionDetailsModel.setDetails(object.optString("details"));
-                                homeFeaturePageSectionDetailsModel.setGenre(object.optString("genre"));
-                                homeFeaturePageSectionDetailsModel.setId(object.optString("id"));
-                                homeFeaturePageSectionDetailsModel.setTotal_time(object.optString("total_time"));
-                                homeFeaturePageSectionDetailsModel.setUrl(object.optString("url"));
-                                homeFeaturePageSectionDetailsModel.setImage(object.optString("image"));
 
                                 singleItemModel.setTitle(object.optString("name"));
                                 singleItemModel.setBanner(object.optString("banner_image"));
@@ -295,14 +281,11 @@ public class HomeFragment extends Fragment {
                                 singleItemModel.setImagedata(object.optString("image"));
 
 
-
                             }
                             singleItems.add(singleItemModel);
 
                         }
 
-                        homeFeaturePageSectionModel.setHomeFeaturePageSectionDetailsModel(arrayList);
-                        homePageSectionModelArrayList.add(homeFeaturePageSectionModel);
                         allSampleData.add(new SectionDataModel(sectionId, sectionName, singleItems));
                     }
 
@@ -320,22 +303,19 @@ public class HomeFragment extends Fragment {
 
     private void adsBannerList() {
 
-        pDialog = new ProgressBarHandler(getActivity());
-        pDialog.show();
+
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/genre_list_api.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        pDialog.hide();
+
 
                         try {
                             Log.d(" response is ", response);
 
                             JSONArray jsonObject = new JSONArray(response);
-
-                            //JSONArray jsonMainNode = jsonObject.getJSONArray("res");
 
 
                             Log.v("SUBHA", "api res == " + jsonObject);
@@ -402,15 +382,13 @@ public class HomeFragment extends Fragment {
 
     private void latestreleasesBannerList() {
 
-        pDialog = new ProgressBarHandler(getActivity());
-        pDialog.show();
+
         String tag_json_req = "user_login";
         StringRequest data = new StringRequest(Request.Method.POST,
                 "http://3.81.18.178/oflix/api/banners.php?appid=735426",
                 new com.android.volley.Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        pDialog.hide();
                         try {
                             Log.d(" response is ", response);
 

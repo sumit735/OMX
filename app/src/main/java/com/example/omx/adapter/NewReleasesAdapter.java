@@ -28,9 +28,10 @@ public class NewReleasesAdapter extends RecyclerView.Adapter<NewReleasesAdapter.
     private ArrayList<BannerItem> moviesList = new ArrayList<BannerItem>();
     Context context;
     CircularImageView circularImageView;
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public ImageView movieImageView;
+
+
+        public CircularImageView circularImageView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -57,18 +58,21 @@ public class NewReleasesAdapter extends RecyclerView.Adapter<NewReleasesAdapter.
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
         final BannerItem movie = moviesList.get(position);
 
+        Glide.with(context)
+                .load(movie.getImage())
+                .thumbnail(0.5f)
+
+                .into(holder.circularImageView);
 // Set Circle color for transparent image
-        circularImageView.setCircleColor(Color.WHITE);
-// Set Border
-        circularImageView.setBorderColor(Color.RED);
+
+    /*    circularImageView.setCircleColor(Color.WHITE);
+        circularImageView.setBorderColor(Color.TRANSPARENT);
         circularImageView.setBorderWidth(10);
-// Add Shadow with default param
         circularImageView.setShadowEnable(true);
-// or with custom param
         circularImageView.setShadowRadius(15);
         circularImageView.setShadowColor(Color.RED);
         circularImageView.setBackgroundColor(Color.RED);
-        circularImageView.setShadowGravity(CircularImageView.ShadowGravity.CENTER);
+        circularImageView.setShadowGravity(CircularImageView.ShadowGravity.CENTER);*/
 
 
     }

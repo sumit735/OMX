@@ -52,14 +52,6 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
     ProgressDialog videoPDialog;
     String videoUrlStr;
-    //Register Dialog
-
-
-    private EditText regEmailIdEditText;
-    private EditText regPasswordEditText;
-    private EditText regFullNameEditText;
-
-    //Forgot Password Dialog
 
 
     private TextView validationIndicatorTextView;
@@ -82,17 +74,14 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
     }*/
     @Override
     public SingleItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-    /*    return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(layoutResourceId, parent, false));
 
-        if (i == 2) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_single_card, null);
-            SingleItemRowHolder mh = new SingleItemRowHolder(v);
-            return mh;
-        }else{*/
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(layoutname, null);
-            SingleItemRowHolder mh = new SingleItemRowHolder(v);
-            return mh;
-        //}
+  View itemView = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.list_item, viewGroup, false);
+
+        return new SingleItemRowHolder(itemView);
+
+
+
     }
 
     @Override
@@ -100,37 +89,19 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
         SingleItemModel singleItem = itemsList.get(i);
 
-      /*  Typeface castDescriptionTypeface = Typeface.createFromAsset(mContext.getAssets(),mContext.getResources().getString(R.string.regular_fonts));
-        holder.itemTitle.setTypeface(castDescriptionTypeface);*/
-
-
         holder.itemTitle.setText(singleItem.getTitle());
         holder.position = i;
-        // holder.temPV.setTag(singleItem.get(i)); //For passing the list item index
 
         try{
             if (singleItem.getImage()!=null) {
-           /* if (singleItem.getImage().equalsIgnoreCase("transparent")) {
-                Picasso.with(mContext)
-                        .load(R.drawable.logo)
-                        .placeholder(R.drawable.transparent)   // optional
-                        .error(R.drawable.transparent)      // optional
-                        .into(holder.itemImage);
-            }else {*/
+
                 Picasso.with(mContext)
                         .load(singleItem.getImage())
                         .placeholder(R.drawable.logo)   // optional
                         .error(R.drawable.logo)      // optional
                         .into(holder.itemImage);
 
-
-//            }
             }else{
-                /*Picasso.with(mContext)
-                        .load(R.drawable.logo)
-                        .placeholder(R.drawable.logo)   // optional
-                        .error(R.drawable.logo)      // optional
-                        .into(holder.itemImage);*/
 
                  Glide.with(mContext)
                         .load(singleItem.getImage())
@@ -138,7 +109,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
 
 
             }
-        }catch (Exception e){ Log.v("BIBHU12", "section adapter Exception==============" + e.toString());}
+        }catch (Exception e){
+        }
 
 
 
@@ -162,8 +134,8 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
         public SingleItemRowHolder(View view) {
             super(view);
 
-          /*  this.itemTitle = (TextView) view.findViewById(R.id.itemTitle);
-            this.itemImage = (ImageView) view.findViewById(R.id.itemImage);*/
+          this.itemTitle = (TextView) view.findViewById(R.id.movieTitle);
+            this.itemImage = (ImageView) view.findViewById(R.id.movieImageView );
 
 
             try {

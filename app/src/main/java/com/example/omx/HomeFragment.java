@@ -47,6 +47,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -63,7 +64,7 @@ import java.util.concurrent.TimeUnit;
 
 public class HomeFragment extends Fragment {
 
-ProgressBarHandler pDialog;
+    ProgressBarHandler pDialog;
     Context context;
     ArrayList<GenreItem> genreItems = new ArrayList<GenreItem>();
     ArrayList<AdsItem> adsItems = new ArrayList<AdsItem>();
@@ -91,8 +92,8 @@ ProgressBarHandler pDialog;
     int keepAliveTime = 10;
     int corePoolSize = 60;
     int maximumPoolSize = 80;
-    String sectionName,sectionId;
-    ArrayList<SingleItemModel> singleItem = new ArrayList<SingleItemModel>();
+    String sectionName, sectionId;
+    ArrayList<SingleItemModel> singleItems = new ArrayList<SingleItemModel>();
     ArrayList<SectionDataModel> allSampleData;
     GetUserDetails asyncReg;
     RecyclerViewDataAdapter adapter;
@@ -100,8 +101,7 @@ ProgressBarHandler pDialog;
     Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
         menuItems = new ArrayList<GetMenuItem>();
@@ -116,7 +116,8 @@ ProgressBarHandler pDialog;
         latest_songs = (Button) v.findViewById(R.id.latest_songs);
         sharedPreferenceClass = new SharedPreferenceClass(getActivity());
 
-        mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        my_recycler_view.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         latest_movies.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,14 +157,6 @@ ProgressBarHandler pDialog;
         });
         latestreleasesBannerList();
 
-
-
-
-        asyncReg = new WatchHistoryList();
-        asyncReg.executeOnExecutor(threadPoolExecutor);
-
-
-
         return v;
 
 
@@ -177,12 +170,12 @@ ProgressBarHandler pDialog;
     }
 
 
-
     @Override
     public void onResume() {
 
         super.onResume();
-
+        singleItems.clear();
+        new GetUserDetails().execute();
 
     }
 
@@ -235,72 +228,7 @@ ProgressBarHandler pDialog;
                 JSONArray myJson = new JSONArray(response);
 
 
-                HomeFeaturePageSectionModel homeFeaturePageSectionModel;
-
-                if (myJson.length() > 0) {
-                    for (int j = 0; j < myJson.length(); j++) {
-                        homeFeaturePageSectionModel = new HomeFeaturePageSectionModel();
-                        JSONObject jsonChildNode = myJson.getJSONObject(j);
-
-                        homeFeaturePageSectionModel.setSection_id(jsonChildNode.optString("id"));
-                        homeFeaturePageSectionModel.setTitle(jsonChildNode.optString("name"));
-
-                        sectionId = jsonChildNode.optString("id");
-                        sectionName = jsonChildNode.optString("name");
-
-                        JSONArray section_item_list = jsonChildNode.optJSONArray("data");
-                        ArrayList<HomeFeaturePageSectionDetailsModel> arrayList = new ArrayList<>();
-
-                        if (section_item_list.length() > 0) {
-                            for (int k = 0; k < section_item_list.length(); k++) {
-
-
-                                HomeFeaturePageSectionDetailsModel homeFeaturePageSectionDetailsModel = new HomeFeaturePageSectionDetailsModel();
-                                JSONObject object = section_item_list.getJSONObject(k);
-
-                                homeFeaturePageSectionDetailsModel.setName(object.optString("name"));
-                                homeFeaturePageSectionDetailsModel.setBanner(object.optString("banner"));
-                                homeFeaturePageSectionDetailsModel.setDetails(object.optString("details"));
-                                homeFeaturePageSectionDetailsModel.setGenre(object.optString("genre"));
-                                homeFeaturePageSectionDetailsModel.setId(object.optString("id"));
-                                homeFeaturePageSectionDetailsModel.setTotal_time(object.optString("total_time"));
-                                homeFeaturePageSectionDetailsModel.setUrl(object.optString("url"));
-                                homeFeaturePageSectionDetailsModel.setImage(object.optString("image"));
-
-                                String name = object.optString("name");
-                                String banner = object.optString("banner");
-                                String details = object.optString("details");
-                                String genre = object.optString("genre");
-                                String id = object.optString("id");
-                                String total_time = object.optString("total_time");
-                                String videourl = object.optString("url");
-                                String image = object.optString("image");
-
-                                arrayList.add(homeFeaturePageSectionDetailsModel);
-
-                                singleItem.add(new SingleItemModel(id,name,genre,videourl,details,banner,total_time));
-                            }
-                        }
-
-                        homeFeaturePageSectionModel.setHomeFeaturePageSectionDetailsModel(arrayList);
-                        homePageSectionModelArrayList.add(homeFeaturePageSectionModel);
-                    }
-                    allSampleData.add(new SectionDataModel(sectionId,sectionName, singleItem));
-
-                }
-
-
-
-                my_recycler_view.setLayoutManager(mLayoutManager);
-                adapter = new RecyclerViewDataAdapter(context, allSampleData);
-                my_recycler_view.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-
-
-
-                Log.v("SUBHA", "Login ID == " + allSampleData.size());
-
-
+                return myJson;
 
             } catch (Exception e) {
 
@@ -316,14 +244,77 @@ ProgressBarHandler pDialog;
             super.onPreExecute();
             pDialog = new ProgressBarHandler(getActivity());
             pDialog.show();
-
         }
 
         @Override
         protected void onPostExecute(JSONArray array) {
             super.onPostExecute(array);
+            try {
+
+                String name = "", banner = "", details = "", genre = "", id = "", total_time = "", videourl = "", imagedata = "";
+
+                HomeFeaturePageSectionModel homeFeaturePageSectionModel;
+
+                if (array.length() > 0) {
+                    for (int j = 0; j < array.length(); j++) {
+                        homeFeaturePageSectionModel = new HomeFeaturePageSectionModel();
+                        JSONObject jsonChildNode = array.getJSONObject(j);
+
+                        homeFeaturePageSectionModel.setSection_id(jsonChildNode.optString("id"));
+                        homeFeaturePageSectionModel.setTitle(jsonChildNode.optString("name"));
+
+                        sectionId = jsonChildNode.optString("id");
+                        sectionName = jsonChildNode.optString("name");
+
+                        JSONArray section_item_list = jsonChildNode.optJSONArray("data");
+                        ArrayList<HomeFeaturePageSectionDetailsModel> arrayList = new ArrayList<>();
+                        SingleItemModel singleItemModel = new SingleItemModel();
+                        if (section_item_list.length() > 0) {
+                            for (int k = 0; k < section_item_list.length(); k++) {
 
 
+                                HomeFeaturePageSectionDetailsModel homeFeaturePageSectionDetailsModel = new HomeFeaturePageSectionDetailsModel();
+                                JSONObject object = section_item_list.getJSONObject(k);
+
+                                homeFeaturePageSectionDetailsModel.setName(object.optString("name"));
+                                homeFeaturePageSectionDetailsModel.setBanner(object.optString("banner_image"));
+                                homeFeaturePageSectionDetailsModel.setDetails(object.optString("details"));
+                                homeFeaturePageSectionDetailsModel.setGenre(object.optString("genre"));
+                                homeFeaturePageSectionDetailsModel.setId(object.optString("id"));
+                                homeFeaturePageSectionDetailsModel.setTotal_time(object.optString("total_time"));
+                                homeFeaturePageSectionDetailsModel.setUrl(object.optString("url"));
+                                homeFeaturePageSectionDetailsModel.setImage(object.optString("image"));
+
+                                singleItemModel.setTitle(object.optString("name"));
+                                singleItemModel.setBanner(object.optString("banner_image"));
+                                singleItemModel.setDetails(object.optString("details"));
+                                singleItemModel.setMovieGenre(object.optString("genre"));
+                                singleItemModel.setImageId(object.optString("id"));
+                                singleItemModel.setTotal_time(object.optString("total_time"));
+                                singleItemModel.setVideoUrl(object.optString("url"));
+                                singleItemModel.setImagedata(object.optString("image"));
+
+
+
+                            }
+                            singleItems.add(singleItemModel);
+
+                        }
+
+                        homeFeaturePageSectionModel.setHomeFeaturePageSectionDetailsModel(arrayList);
+                        homePageSectionModelArrayList.add(homeFeaturePageSectionModel);
+                        allSampleData.add(new SectionDataModel(sectionId, sectionName, singleItems));
+                    }
+
+
+                }
+                adapter = new RecyclerViewDataAdapter(getActivity(), allSampleData);
+                my_recycler_view.setLayoutManager(mLayoutManager);
+                my_recycler_view.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+
+            }
         }
     }
 
@@ -350,7 +341,6 @@ ProgressBarHandler pDialog;
                             Log.v("SUBHA", "api res == " + jsonObject);
 
 
-
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
                             Log.v("SUBHA", "api res == " + lengthJsonArr);
@@ -366,15 +356,15 @@ ProgressBarHandler pDialog;
 
                             }
 
-                            AdsAdapter adsAdapter = new AdsAdapter(bannerItems, getActivity());
+                            AdsAdapter adsAdapter = new AdsAdapter(adsItems, getActivity());
                             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
                             linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL); // set Horizontal Orientation
                             adspager.setLayoutManager(linearLayoutManager); // set LayoutManager to RecyclerView
                             adspager.setItemAnimator(new DefaultItemAnimator());
                             adspager.setAdapter(adsAdapter);
 
-                            asyncReg = new GetUserDetails();
-                            asyncReg.executeOnExecutor(threadPoolExecutor);
+                            //asyncReg = new GetUserDetails();
+                            // asyncReg.executeOnExecutor(threadPoolExecutor);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -432,7 +422,6 @@ ProgressBarHandler pDialog;
                             Log.v("SUBHA", "api res == " + jsonObject);
 
 
-
                             int lengthJsonArr = jsonObject.length();
                             JSONObject jsonChildNode;
                             Log.v("SUBHA", "api res == " + lengthJsonArr);
@@ -456,8 +445,6 @@ ProgressBarHandler pDialog;
                             bannerpager.setAdapter(adsAdapter);
 
                             adsBannerList();
-
-
 
 
                         } catch (JSONException e) {

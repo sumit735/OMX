@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.omx.R;
+import com.example.omx.model.AdsItem;
 import com.example.omx.model.BannerItem;
 
 import java.util.ArrayList;
 
 public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.MyViewHolder> {
     Context mContext;
-    private ArrayList<BannerItem> moviesList = new ArrayList<BannerItem>();
+    private ArrayList<AdsItem> moviesList = new ArrayList<AdsItem>();
     Context context;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -31,7 +32,7 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.MyViewHolder> {
     }
 
 
-    public AdsAdapter(ArrayList<BannerItem> moviesList, Context context) {
+    public AdsAdapter(ArrayList<AdsItem> moviesList, Context context) {
         this.moviesList = moviesList;
         this.context = context;
     }
@@ -46,7 +47,7 @@ public class AdsAdapter extends RecyclerView.Adapter<AdsAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        final BannerItem movie = moviesList.get(position);
+        final AdsItem movie = moviesList.get(position);
 
         Glide.with(context)
                 .load(movie.getImage())

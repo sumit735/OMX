@@ -29,66 +29,49 @@ import java.util.ArrayList;
 
 
 public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDataAdapter.ItemRowHolder> {
-    ArrayList<SingleItemModel> singleSectionItems;
+    private ArrayList<SingleItemModel> moviesList = new ArrayList<SingleItemModel>();
     private ArrayList<SectionDataModel> dataList;
     private Context mContext;
-    private ArrayList<String> bannerUrls = new ArrayList<String>();
     String pemalink;
-    // String image;
     boolean loaded = false;
-    //int counter=0;
-
 
 
     public RecyclerViewDataAdapter(Context context, ArrayList<SectionDataModel> dataList) {
         this.dataList = dataList;
         this.mContext = context;
-        this.bannerUrls = bannerUrls;
-
+        //notifyDataSetChanged();
 
     }
 
-    /* public void swapItems(){
-         loaded = true;
-     }*/
-    @Override
-    public ItemRowHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.home_listitem, null);
-            ItemRowHolder mh = new ItemRowHolder(v);
-            return mh;
+    @Override
+    public ItemRowHolder onCreateViewHolder(ViewGroup parent, int i) {
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.home_listitem, parent, false);
+
+        return new ItemRowHolder(itemView);
+
 
     }
 
     @Override
     public void onBindViewHolder(final ItemRowHolder itemRowHolder, final int i) {
 
-        try {
-
-            if (dataList.size() < 1) {
-                itemRowHolder.section_title_layout.setVisibility(View.GONE);
-                itemRowHolder.recycler_view_list.setVisibility(View.GONE);
-                return;
-            } else{
-                itemRowHolder.section_title_layout.setVisibility(View.VISIBLE);
-                itemRowHolder.recycler_view_list.setVisibility(View.VISIBLE);
-            }
+       // try {
 
 
-            final String sectionName = dataList.get(i).getHeaderTitle().trim();
-            final String sectionId = dataList.get(i).getHeaderPermalink();
 
-            singleSectionItems = dataList.get(i).getAllItemsInSection();
+            final String sectionName =  dataList.get(i).getHeaderPermalink().trim();
+            final String sectionId =  dataList.get(i).getHeaderTitle();
+
+            moviesList = dataList.get(i).getAllItemsInSection();
             pemalink = dataList.get(i).getHeaderPermalink();
 
             itemRowHolder.itemTitle.setText(sectionName.trim());
             SectionListDataAdapter itemListDataAdapter = null;
 
 
-
-
-                itemListDataAdapter = new SectionListDataAdapter(mContext, singleSectionItems, R.layout.list_item);
-
+            itemListDataAdapter = new SectionListDataAdapter(mContext, moviesList, R.layout.list_item);
 
 
             itemRowHolder.recycler_view_list.setHasFixedSize(true);
@@ -98,45 +81,30 @@ public class RecyclerViewDataAdapter extends RecyclerView.Adapter<RecyclerViewDa
 
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-
-
-        }
-
-
     }
 
-    @Override
-//    public int getItemCount() {
-//        return dataList.size();
-//    }
     public int getItemCount() {
-        return 0;
+        return dataList.size();
 
     }
 
-    @Override
+   /* @Override
     public int getItemViewType(int position) {
         return position;
-    }
+    }*/
 
 
-    public class ItemRowHolder extends RecyclerView.ViewHolder  {
+    public class ItemRowHolder extends RecyclerView.ViewHolder {
 
         protected TextView itemTitle;
         protected RecyclerView recycler_view_list;
-        private RelativeLayout  section_title_layout;
+        private RelativeLayout section_title_layout;
 
         public ItemRowHolder(View view) {
             super(view);
 
             this.itemTitle = (TextView) view.findViewById(R.id.sectiontitle);
-            this.section_title_layout = (RelativeLayout) view.findViewById(R.id.section_title_layout);
             this.recycler_view_list = (RecyclerView) view.findViewById(R.id.featureContent);
-
-
-
 
 
         }

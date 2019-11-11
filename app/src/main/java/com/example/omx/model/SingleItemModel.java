@@ -12,6 +12,16 @@ public class SingleItemModel {
     private String banner;
     private String details;
 
+    public String getImagedata() {
+        return imagedata;
+    }
+
+    public void setImagedata(String imagedata) {
+        this.imagedata = imagedata;
+    }
+
+    private String imagedata;
+
     public String getTotal_time() {
         return total_time;
     }
@@ -76,7 +86,7 @@ public class SingleItemModel {
 
 
 
-    public SingleItemModel(String imageId, String title,String movieGenre, String videoUrl,String details,String banner,String total_time) {
+    /*public SingleItemModel(String imageId, String title,String movieGenre, String videoUrl,String details,String banner,String total_time,String imagedata) {
         super();
         this.imageId = imageId;
         this.title = title;
@@ -86,9 +96,10 @@ public class SingleItemModel {
         this.banner = banner;
         this.details = details;
         this.total_time = total_time;
+        this.imagedata = imagedata;
 
 
-    }
+    }*/
     public String getImage() {
         return imageId;
     }

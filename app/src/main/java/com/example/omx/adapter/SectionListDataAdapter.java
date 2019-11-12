@@ -137,7 +137,7 @@ public class SectionListDataAdapter extends RecyclerView.Adapter<SectionListData
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String movieTypeId = itemsList.get(position).getVideoTypeId();
+                   // String movieTypeId = itemsList.get(position).getVideoTypeId();
 
                     Intent intent = new Intent(mContext, SinglePartActivity.class);
                     intent.putExtra("MovieTitle",itemsList.get(position).getTitle());

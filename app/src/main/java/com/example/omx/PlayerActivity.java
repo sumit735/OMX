@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -15,6 +16,7 @@ import android.widget.VideoView;
 public class PlayerActivity extends AppCompatActivity {
 
     ProgressBarHandler pDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +24,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_player);
 
-        VideoView videoView =(VideoView)findViewById(R.id.videoView1);
+        VideoView videoView = (VideoView) findViewById(R.id.videoView1);
         pDialog = new ProgressBarHandler(PlayerActivity.this);
         pDialog.show();
 
@@ -32,21 +34,28 @@ public class PlayerActivity extends AppCompatActivity {
 
 
         //Creating MediaController
-        MediaController mediaController= new MediaController(this);
+        MediaController mediaController = new MediaController(this);
         mediaController.setAnchorView(videoView);
 
         String changedString = getIntent().getStringExtra("VideoUrl").replaceAll("\"", "\"");
 
         //specify the location of media file
-       // Uri uri= Uri.parse("https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4");
-        Uri uri= Uri.parse(changedString);
+        // Uri uri= Uri.parse("https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4");
+        Uri uri = Uri.parse(changedString);
 
         //Setting MediaController and URI, then starting the videoView
         videoView.setMediaController(mediaController);
         videoView.setVideoURI(uri);
         videoView.requestFocus();
         videoView.start();
-        pDialog.hide();
+
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+
+            public void onPrepared(MediaPlayer mp) {
+                // TODO Auto-generated method stub
+                pDialog.hide();
+            }
+        });
 
     }
 
@@ -56,9 +65,7 @@ public class PlayerActivity extends AppCompatActivity {
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
-       /* if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT){
-        }*/
+
     }
 }
 

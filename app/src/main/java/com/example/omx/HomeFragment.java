@@ -116,7 +116,7 @@ public class HomeFragment extends Fragment {
         latest_songs = (Button) v.findViewById(R.id.latest_songs);
         sharedPreferenceClass = new SharedPreferenceClass(getActivity());
 
-        my_recycler_view.setHasFixedSize(true);
+       // my_recycler_view.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
 
         latest_movies.setOnClickListener(new View.OnClickListener() {
@@ -282,15 +282,17 @@ public class HomeFragment extends Fragment {
 
 
                             }
-                            singleItems.add(singleItemModel);
 
+                            singleItems.add(singleItemModel);
                         }
+
 
                         allSampleData.add(new SectionDataModel(sectionId, sectionName, singleItems));
                     }
 
 
                 }
+                pDialog.hide();
                 adapter = new RecyclerViewDataAdapter(getActivity(), allSampleData);
                 my_recycler_view.setLayoutManager(mLayoutManager);
                 my_recycler_view.setAdapter(adapter);

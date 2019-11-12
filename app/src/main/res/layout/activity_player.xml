@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00ff00"
     tools:context=".PlayerActivity">
+
+
 
     <VideoView
         android:id="@+id/videoView1"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

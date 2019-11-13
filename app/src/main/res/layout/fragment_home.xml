@@ -26,6 +26,7 @@
                 <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#E9E5E5"
                     android:scrollbars="none">
 
                     <LinearLayout
@@ -36,38 +37,55 @@
                         <Button
                             android:id="@+id/latest_movies"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/latestvideos_bkg"
-                            android:text="MOVIES"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/transparent"
+                            android:drawableTop="@drawable/home_movies"
+                            android:text="Movies"
                             android:textColor="@color/white" />
 
                         <Button
                             android:id="@+id/latest_webseries"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/latestvideos_bkg"
-                            android:text="Webseries"
-                            android:textColor="@color/white" />
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@color/transparent"
+                            android:drawableTop="@drawable/home_webseries"
+                            android:text="Web Series"
+                            android:textColor="@color/white"  />
 
                         <Button
                             android:id="@+id/latest_shortfilms"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/latestvideos_bkg"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@color/transparent"
+                            android:drawableTop="@drawable/home_shortmovie"
                             android:text="Short Films"
                             android:textColor="@color/white" />
 
                         <Button
                             android:id="@+id/latest_songs"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_margin="5dp"
-                            android:background="@drawable/latestvideos_bkg"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
                             android:text="Songs"
+                            android:background="@color/transparent"
+                            android:drawableTop="@drawable/home_songs"
                             android:textColor="@color/white" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
 

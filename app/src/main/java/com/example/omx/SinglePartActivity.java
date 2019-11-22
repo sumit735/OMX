@@ -3,6 +3,7 @@ package com.example.omx;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
@@ -14,10 +15,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.omx.model.SharedPreferenceClass;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +38,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class SinglePartActivity extends AppCompatActivity {
+public class SinglePartActivity extends Activity implements PaymentResultListener {
 
     ImageView bannerImageView;
     TextView movieDetailTitle,movieStory,genreValue,movieDuration;
@@ -54,6 +58,13 @@ public class SinglePartActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.activity_single_part);
+
+         /*
+          ........................................
+          To ensure faster loading of the Checkout form,
+          call this method as early as possible in your checkout flow.
+         */
+        Checkout.preload(getApplicationContext());
 
         bannerImageView = (ImageView) findViewById(R.id.bannerImageView);
         movieDetailTitle = findViewById(R.id.movieDetailTitle);
@@ -82,10 +93,11 @@ public class SinglePartActivity extends AppCompatActivity {
         genre = getIntent().getStringExtra("MovieGenre");
         movieId = getIntent().getStringExtra("MovieID");
 
-        if (genre != null){
-            genreValue.setText(genre);
-        }else{
+        if (genre == null || genre.equalsIgnoreCase("")){
+
             genreValue.setVisibility(View.GONE);
+        }else{
+            genreValue.setText(genre);
         }
 
         Glide.with(SinglePartActivity.this)
@@ -109,12 +121,65 @@ public class SinglePartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                asyncReg = new WatchHistoryStore();
-                asyncReg.executeOnExecutor(threadPoolExecutor);
+              /*  asyncReg = new WatchHistoryStore();
+                asyncReg.executeOnExecutor(threadPoolExecutor);*/
 
+                startPayment();
 
             }
         });
+
+    }
+    public void startPayment() {
+        /*
+          You need to pass current activity in order to let Razorpay create CheckoutActivity
+         */
+        final Activity activity = this;
+
+        final Checkout co = new Checkout();
+
+        try {
+            JSONObject options = new JSONObject();
+            options.put("name", sharedPreferenceClass.getValue_string("NAME_STR"));
+            options.put("description", "Demoing Charges");
+            //You can omit the image option to fetch the image from dashboard
+            options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
+            options.put("currency", "INR");
+            options.put("amount", "100");
+
+            JSONObject preFill = new JSONObject();
+            preFill.put("email", "test@test.com");
+            preFill.put("contact", sharedPreferenceClass.getValue_string("MOBILE_ID"));
+
+            options.put("prefill", preFill);
+
+            co.open(activity, options);
+        } catch (Exception e) {
+            Toast.makeText(activity, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * The name of the function has to be
+     * onPaymentSuccess
+     * Wrap your code in try catch, as shown, to ensure that this method runs correctly
+     */
+    @Override
+    public void onPaymentSuccess(String s) {
+
+        Toast.makeText(this, "Payment Success", Toast.LENGTH_SHORT).show();
+
+        asyncReg = new WatchHistoryStore();
+        asyncReg.executeOnExecutor(threadPoolExecutor);
+    }
+    /**
+     * The name of the function has to be
+     * onPaymentError
+     * Wrap your code in try catch, as shown, to ensure that this method runs correctly
+     */
+    @Override
+    public void onPaymentError(int i, String s) {
 
     }
 

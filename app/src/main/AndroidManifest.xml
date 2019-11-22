@@ -33,6 +33,9 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_jA6QbQwxPgUAdp" />
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@
     <color name="loader_color">#3752E9</color>
     <color name="transparent">#00000000</color>
     <color name="editTextColor">#000000</color>
+    <color name="homeTextColor">#999696</color>
     <color name="hint_color">#444343</color>
     <color name="light_grey">#CAC7C7</color>
     <color name="buttonbg">#3752E9</color>

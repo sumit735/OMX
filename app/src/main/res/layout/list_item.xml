@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/listViewLayout"
-    android:layout_width="170dp"
+    android:layout_width="130dp"
     android:layout_height="wrap_content"
     android:background="@drawable/grid_color_selector"
     android:clickable="false"
@@ -17,8 +17,8 @@
 
         <ImageView
             android:id="@+id/movieImageView"
-            android:layout_width="170dp"
-            android:layout_height="95dp"
+            android:layout_width="130dp"
+            android:layout_height="210dp"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:background="@drawable/logo"
@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/movieImageOverlay"
-            android:layout_width="170dp"
-            android:layout_height="95dp"
+            android:layout_width="130dp"
+            android:layout_height="210dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"

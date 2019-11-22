@@ -80,7 +80,6 @@ public class HomeFragment extends Fragment {
     ArrayList<GetMenuItem> menuItems;
     RecyclerView my_recycler_view;
     RecyclerView adspager;
-    RecyclerView bannerpager;
     LinearLayoutManager mLayoutManager;
     Button latest_songs, latest_shortfilms, latest_webseries, latest_movies;
     MovieAdapter mAdapter;
@@ -109,7 +108,7 @@ public class HomeFragment extends Fragment {
         allSampleData = new ArrayList<SectionDataModel>();
         adspager = (RecyclerView) v.findViewById(R.id.adspager);
         my_recycler_view = (RecyclerView) v.findViewById(R.id.my_recycler_view);
-        bannerpager = (RecyclerView) v.findViewById(R.id.bannerpager);
+
         loadingPanel = (RelativeLayout) v.findViewById(R.id.loadingPanel);
         latest_movies = (Button) v.findViewById(R.id.latest_movies);
         latest_webseries = (Button) v.findViewById(R.id.latest_webseries);
@@ -156,8 +155,8 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        latestreleasesBannerList();
-
+       // latestreleasesBannerList();
+        adsBannerList();
 
         return v;
 
@@ -383,7 +382,7 @@ public class HomeFragment extends Fragment {
         VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
     }
 
-    private void latestreleasesBannerList() {
+    /*private void latestreleasesBannerList() {
 
 
         String tag_json_req = "user_login";
@@ -457,7 +456,7 @@ public class HomeFragment extends Fragment {
         data.setRetryPolicy(new
                 DefaultRetryPolicy(30000, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         VolleySingleton.getInstance().getRequestQueue().add(data).addMarker(tag_json_req);
-    }
+    }*/
 }
 
 
